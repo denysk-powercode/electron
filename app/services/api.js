@@ -1,7 +1,8 @@
 import axios from 'axios';
 import store from './storage';
 
-const baseURL = process.env.NODE_ENV === 'development' ? 'http://localhost:5000/api/v1' : '';
+const baseURL =
+  process.env.NODE_ENV === 'development' ? 'http://localhost:5000/api/v1' : 'http://decrm.powercode.pro:5000/api/v1';
 
 const generateInstance = () => {
   const token = store.get('token');

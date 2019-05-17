@@ -7,14 +7,18 @@ const HeaderControls = ({ logout }) => {
   return (
     <Container>
       <Paydesk>Paydesk: 500</Paydesk>
-      <CashControls>
-        <LeftButton inverted>Add cash</LeftButton>
+      <div>
+        <LeftButton onClick={() => {}} inverted>
+          Add cash
+        </LeftButton>
         <Button inverted>Withdraw cash</Button>
-      </CashControls>
-      <PaydeskControls>
-        <LeftButton inverted>Open paydesk</LeftButton>
+      </div>
+      <div>
+        <LeftButton onClick={() => {}} inverted>
+          Open paydesk
+        </LeftButton>
         <Button inverted>Close paydesk</Button>
-      </PaydeskControls>
+      </div>
       <LogoutButton inverted onClick={logout}>
         Logout
       </LogoutButton>
@@ -41,12 +45,8 @@ const Paydesk = styled.div`
   font-weight: bold;
   font-size: 14px;
 `;
-const CashControls = styled.div``;
-const PaydeskControls = styled.div``;
 const LeftButton = styled(Button)`
-  &&& {
-    margin-right: 15px;
-  }
+  margin-right: 15px;
 `;
 const LogoutButton = styled(Button)`
   align-self: flex-end;

@@ -5,9 +5,7 @@ import HeaderControls from './Controls';
 
 import { logout } from '../../store/auth/actions';
 
-const Header = ({ logout }) => {
-  return <HeaderControls logout={logout} />;
-};
+const Header = ({ logout }) => <HeaderControls logout={logout} />;
 
 Header.propTypes = {
   logout: func.isRequired,
