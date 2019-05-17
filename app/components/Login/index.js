@@ -1,44 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { connect } from 'react-redux';
 import propTypes from 'prop-types';
-import { push } from 'connected-react-router';
 
-import { loginSuccess } from '../../store/user/actions';
+import LoginForm from './Form';
+import { login } from '../../store/auth/actions';
 
-const Login = ({ loginSuccess: login, push: pushRoute }) => {
-  const [inputs, changeInput] = useState({ name: '', password: '' });
+const Login = ({ login }) => {
+  const [inputs, changeInput] = useState({ username: '', password: '' });
+  const [error, setError] = useState(null);
+  const [isLoading, setLoadingState] = useState(false);
   const onSubmit = (e) => {
     e.preventDefault();
-    if (inputs.name === '123' && inputs.password === '123') {
-      login();
-      pushRoute('/');
-    }
+    setLoadingState(true);
+    login(inputs.username, inputs.password, (e) => {
+      if (e) {
+        setError(e.message || e);
+      }
+      setLoadingState(false);
+    });
   };
+  const onInputChange = useCallback((e, name) => {
+    setError(null);
+    changeInput({ ...inputs, [name]: e.target.value });
+  });
   return (
-    <div>
-      <form onSubmit={onSubmit}>
-        <span>Username:</span>
-        <input type="text" value={inputs.name} onChange={(e) => changeInput({ ...inputs, name: e.target.value })} />
-        <span>Password:</span>
-        <input
-          type="text"
-          value={inputs.password}
-          onChange={(e) => changeInput({ ...inputs, password: e.target.value })}
-        />
-        <button type="submit">Login</button>
-      </form>
-    </div>
+    <LoginForm
+      onSubmit={onSubmit}
+      username={inputs.username}
+      password={inputs.password}
+      onInputChange={onInputChange}
+      isLoading={isLoading}
+      error={error}
+    />
   );
 };
 
 Login.propTypes = {
-  loginSuccess: propTypes.func.isRequired,
-  push: propTypes.func.isRequired,
+  login: propTypes.func.isRequired,
 };
 
 const mapDispatchToProps = {
-  loginSuccess,
-  push,
+  login,
 };
 
 export default connect(

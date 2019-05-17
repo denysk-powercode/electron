@@ -2,9 +2,9 @@
 import * as actions from './actions';
 import handleActions from '../immerHandleActions';
 
-const initialState = Object.freeze({
+const initialState = {
   isLoggedIn: true,
-});
+};
 
 const userReducer = handleActions(
   {
@@ -13,9 +13,6 @@ const userReducer = handleActions(
     },
     [actions.logoutSuccess]: (draft) => {
       draft.isLoggedIn = false;
-    },
-    [actions.resetUserState]: (draft) => {
-      draft = initialState;
     },
   },
   initialState

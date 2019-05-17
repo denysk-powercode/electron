@@ -3,9 +3,10 @@ import { Provider } from 'react-redux';
 import propTypes from 'prop-types';
 import { ConnectedRouter as Router } from 'connected-react-router';
 import { PersistGate } from 'redux-persist/integration/react';
-import ErrorBoundary from './components/common/ErrorBoundary';
+import ErrorBoundary from './components/general/ErrorBoundary';
 import IntlProvider from './i18n/IntlProvider';
-import Main from './screens/app';
+import Main from './routers/app';
+import GlobalStyle from './styled/globalStyles';
 // needed for importing global styles from external libraries (like react-table)
 // haven't found better solution yet, it won't compile if i try to import css file directly
 import './app.global.css';
@@ -16,6 +17,7 @@ const App = ({ store, history, persistor }) => (
       <Router history={history}>
         <IntlProvider>
           <ErrorBoundary>
+            <GlobalStyle />
             <Main />
           </ErrorBoundary>
         </IntlProvider>

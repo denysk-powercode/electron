@@ -2,9 +2,9 @@
 import * as actions from './actions';
 import handleActions from '../immerHandleActions';
 
-const initialState = Object.freeze({
+const initialState = {
   locale: 'en_US',
-});
+};
 
 const userReducer = handleActions(
   {

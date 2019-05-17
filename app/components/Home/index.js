@@ -8,7 +8,7 @@ import { push } from 'connected-react-router';
 import Features from '../Features';
 
 import { setLocale } from '../../store/app/actions';
-import { logoutSuccess } from '../../store/user/actions';
+import { logoutSuccess } from '../../store/auth/actions';
 
 const App = (props) => {
   const setLanguage = React.useCallback((e) => {
