@@ -3,7 +3,7 @@ import * as actions from './actions';
 import handleActions from '../immerHandleActions';
 
 const initialState = {
-  isLoggedIn: true,
+  isLoggedIn: false,
 };
 
 const userReducer = handleActions(
