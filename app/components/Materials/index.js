@@ -3,14 +3,12 @@ import { array, bool, func, number } from 'prop-types';
 import { connect } from 'react-redux';
 import { Button } from 'semantic-ui-react';
 import ContentWrapper from '../common/ContentWrapper';
-import UsersTable from './Table';
-import { fetchUsers, createUser, updateUser } from '../../store/users/actions';
-import { selectUsers } from '../../store/users/selectors';
+import MaterialsTable from './Table';
+import { fetchMaterials, createMaterial, updateMaterial } from '../../store/materials/actions';
+import { selectMaterials } from '../../store/materials/selectors';
 import { useModals } from '../../hooks/useModals';
 
-import UserModal from './UserModal';
-
-const Users = ({ data, isLoading, fetchUsers, createUser, updateUser, totalCount }) => {
+const Users = ({ data, isLoading, fetchMaterials, createMaterial, updateMaterial, totalCount }) => {
   // state
   const [pageSize, setPageSize] = useState(10);
   const [userInQuestion, setUserInQuestion] = useState(null);
@@ -26,9 +24,13 @@ const Users = ({ data, isLoading, fetchUsers, createUser, updateUser, totalCount
   const closeEditUserModal = useCallback(() => dispatch({ type: 'CLOSE', name: 'editUser' }));
 
   // callbacks
-  const fetchData = (state) => fetchUsers(state.page * state.pageSize, state.pageSize, state.sorted[0], state.filtered);
+  const fetchData = (state) =>
+    fetchMaterials(state.page * state.pageSize, state.pageSize, state.sorted[0], state.filtered);
   const onPageSizeChange = useCallback((pageSize) => setPageSize(pageSize));
-  const changeUserStatus = useCallback((id, newStatus) => updateUser({ is_active: newStatus, id }));
+  const changeUserStatus = useCallback((id, newStatus) => updateMaterial({ is_active: newStatus, id }));
+
+  console.log('totalCount', totalCount);
+  console.log('pageSize', pageSize);
 
   return (
     <ContentWrapper
@@ -39,7 +41,7 @@ const Users = ({ data, isLoading, fetchUsers, createUser, updateUser, totalCount
         </Button>
       }
     >
-      <UsersTable
+      <MaterialsTable
         data={data}
         pages={Math.ceil(totalCount / pageSize)}
         isLoading={isLoading}
@@ -49,14 +51,6 @@ const Users = ({ data, isLoading, fetchUsers, createUser, updateUser, totalCount
         changeUserStatus={changeUserStatus}
         pageSize={pageSize}
       />
-      <UserModal isVisible={modals.newUser} onClose={closeNewUserModal} createUser={createUser} />
-      <UserModal
-        isEdit
-        isVisible={modals.editUser}
-        onClose={closeEditUserModal}
-        updateUser={updateUser}
-        user={userInQuestion}
-      />
     </ContentWrapper>
   );
 };
@@ -64,22 +58,22 @@ const Users = ({ data, isLoading, fetchUsers, createUser, updateUser, totalCount
 Users.propTypes = {
   data: array.isRequired,
   isLoading: bool.isRequired,
-  fetchUsers: func.isRequired,
-  createUser: func.isRequired,
-  updateUser: func.isRequired,
+  fetchMaterials: func.isRequired,
+  createMaterial: func.isRequired,
+  updateMaterial: func.isRequired,
   totalCount: number.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  data: selectUsers(state),
-  isLoading: state.users.isLoading,
-  totalCount: state.users.totalCount,
+  data: selectMaterials(state),
+  isLoading: state.materials.isLoading,
+  totalCount: state.materials.totalCount,
 });
 
 const mapDispatchToProps = {
-  fetchUsers,
-  createUser,
-  updateUser,
+  fetchMaterials,
+  createMaterial,
+  updateMaterial,
 };
 
 export default connect(

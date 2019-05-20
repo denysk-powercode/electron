@@ -13,7 +13,7 @@ const toQuery = (arr) => {
 
 const apiRoutes = {
   fetchUsers: (offset, limit, orderField, orderDirection, filtered) => {
-    const order = orderField ? `&order=${orderField}&order=${orderDirection}` : '';
+    const order = orderField ? `&orderBy=${orderField}&order=${orderDirection}` : '';
     const filters = Object.entries(filtered).length ? `&${toQuery(filtered)}` : '';
     return `/user/?offset=${offset}&limit=${limit}${order}${filters}`;
   },
@@ -23,7 +23,7 @@ const apiRoutes = {
 
 function* fetchUsersSaga({ payload: { offset, limit, sorted = {}, filtered = {} } }) {
   try {
-    const orderDirection = sorted.desc ? 'DESC' : 'ASC';
+    const orderDirection = sorted.desc ? 'desc' : 'asc';
     const response = yield ApiService.instance.get(
       apiRoutes.fetchUsers(offset, limit, sorted.id, orderDirection, filtered)
     );

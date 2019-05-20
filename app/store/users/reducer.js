@@ -3,7 +3,7 @@ import * as actions from './actions';
 import handleActions from '../immerHandleActions';
 
 const initialState = {
-  userMap: {},
+  usersMap: {},
   usersIds: [],
   totalCount: 0,
   isLoading: false,
@@ -19,17 +19,17 @@ const userReducer = handleActions(
       draft.totalCount = totalCount;
       draft.usersIds = [];
       users.forEach((user) => {
-        draft.userMap[user.id] = user;
+        draft.usersMap[user.id] = user;
         draft.usersIds.push(user.id);
       });
     },
     [actions.createUserSuccess]: (draft, { payload: { user } }) => {
       draft.usersIds.push(user.id);
-      draft.userMap[user.id] = user;
+      draft.usersMap[user.id] = user;
       draft.totalCount += 1;
     },
     [actions.updateUserSuccess]: (draft, { payload: { user } }) => {
-      draft.userMap[user.id] = user;
+      draft.usersMap[user.id] = user;
     },
     [actions.fetchUsersFailure]: (draft) => {
       draft.isLoading = false;
