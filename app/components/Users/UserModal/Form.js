@@ -2,7 +2,7 @@ import React from 'react';
 import { func } from 'prop-types';
 import styled from 'styled-components';
 import { Field, Form } from 'formik';
-import { Header, TextArea, Button } from 'semantic-ui-react';
+import { TextArea, Button } from 'semantic-ui-react';
 
 import CustomInput from '../../common/Input';
 import ErrorDiv from '../../common/ErrorDiv';
@@ -12,7 +12,6 @@ import formikHoc from './formik';
 const UserForm = ({ onClose, ...rest }) => {
   return (
     <StyledForm>
-      <StyledHeader as="h2">New User</StyledHeader>
       <FirstBlock>
         <UsernamesBlock>
           <StyledCustomInput label="First Name" name="first_name" placeholder="First name" />
@@ -58,12 +57,6 @@ UserForm.propTypes = {
 const StyledForm = styled(Form)`
   display: flex;
   flex-direction: column;
-  padding: 20px;
-`;
-
-const StyledHeader = styled(Header)`
-  margin-bottom: 40px;
-  align-self: center;
 `;
 
 const FirstBlock = styled.div`

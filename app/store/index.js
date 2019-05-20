@@ -14,7 +14,13 @@ const persistConfig = {
 };
 
 export const configureStore = ({ initialState = {}, middleware = [] } = {}) => {
-  const sagaMiddleware = createSagaMiddleware();
+  const sagaMiddleware = createSagaMiddleware({
+    onError: (error, errorInfo) => {
+      console.log('---------ERROR IN REDUX SAGA-----------');
+      console.log(error);
+      console.log(errorInfo);
+    },
+  });
   const persistedReducer = persistReducer(persistConfig, rootReducer);
   const devtools =
     typeof window !== 'undefined' &&

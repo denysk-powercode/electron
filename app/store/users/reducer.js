@@ -31,11 +31,6 @@ const userReducer = handleActions(
     [actions.updateUserSuccess]: (draft, { payload: { user } }) => {
       draft.userMap[user.id] = user;
     },
-    [actions.deleteUserSuccess]: (draft, { payload: { id } }) => {
-      draft.usersIds = draft.usersIds.filter((item) => item !== id);
-      delete draft.userMap[id];
-      draft.totalCount -= 1;
-    },
     [actions.fetchUsersFailure]: (draft) => {
       draft.isLoading = false;
     },

@@ -1,7 +1,7 @@
 import React from 'react';
 import { func, bool, array, number } from 'prop-types';
 import ReactTable from 'react-table';
-import { Icon, Popup, Button } from 'semantic-ui-react';
+import { Icon, Popup, Button, Checkbox } from 'semantic-ui-react';
 
 const columns = [
   {
@@ -28,23 +28,29 @@ const columns = [
     Cell: (row) => <Popup hoverable trigger={<Icon name="info" size="large" />} content={row.value} />,
   },
   {
+    Header: 'Status',
+    accessor: 'is_active',
+    filterable: false,
+    /* eslint-disable-next-line react/prop-types */
+    Cell: ({ original, tdProps }) => (
+      <Checkbox
+        toggle
+        checked={original.is_active}
+        onChange={(e, data) => tdProps.rest.actions.changeUserStatus(original.id, data.checked)}
+      />
+    ),
+  },
+  {
     Header: '',
     accessor: 'additional_info',
     sortable: false,
     filterable: false,
     Cell: (props) => (
-      <>
-        <Button
-          onClick={() => props.tdProps.rest.actions.openEditUserModal(props.original)}
-          icon={<Icon name="edit" />}
-        />
-        {Boolean(props.original.role) && (
-          <Button
-            onClick={() => props.tdProps.rest.actions.openDeleteModal(props.original)}
-            icon={<Icon name="user delete" />}
-          />
-        )}
-      </>
+      <Button
+        /* eslint-disable-next-line react/prop-types */
+        onClick={() => props.tdProps.rest.actions.openEditUserModal(props.original)}
+        icon={<Icon name="edit" />}
+      />
     ),
   },
 ];
@@ -56,8 +62,8 @@ const UsersTable = ({
   fetchData,
   pageSize,
   onPageSizeChange,
-  openDeleteModal,
   openEditUserModal,
+  changeUserStatus,
 }) => {
   return (
     <ReactTable
@@ -81,7 +87,7 @@ const UsersTable = ({
           justifyContent: 'center',
         },
         actions: {
-          openDeleteModal,
+          changeUserStatus,
           openEditUserModal,
         },
       })}
@@ -96,8 +102,8 @@ UsersTable.propTypes = {
   pageSize: number.isRequired,
   fetchData: func.isRequired,
   onPageSizeChange: func.isRequired,
-  openDeleteModal: func.isRequired,
   openEditUserModal: func.isRequired,
+  changeUserStatus: func.isRequired,
 };
 
 export default UsersTable;

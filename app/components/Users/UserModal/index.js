@@ -1,16 +1,14 @@
 import React from 'react';
 import { func, bool, object } from 'prop-types';
-import { Modal } from 'semantic-ui-react';
 
 import UserForm from './Form';
+import Modal from '../../common/Modal';
 
-const UserModal = ({ isVisible, onClose, createUser, updateUser, isEdit, user }) => {
-  return (
-    <Modal open={isVisible} onClose={onClose} closeIcon closeOnDimmerClick={false}>
-      <UserForm onClose={onClose} createUser={createUser} updateUser={updateUser} isEdit={isEdit} user={user} />
-    </Modal>
-  );
-};
+const UserModal = ({ isVisible, onClose, createUser, updateUser, isEdit, user }) => (
+  <Modal isVisible={isVisible} onClose={onClose} title={isEdit ? 'Edit User' : 'Create User'}>
+    <UserForm onClose={onClose} createUser={createUser} updateUser={updateUser} isEdit={isEdit} user={user} />
+  </Modal>
+);
 
 UserModal.propTypes = {
   isVisible: bool.isRequired,

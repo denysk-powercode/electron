@@ -17,7 +17,6 @@ const apiRoutes = {
     const filters = Object.entries(filtered).length ? `&${toQuery(filtered)}` : '';
     return `/user/?offset=${offset}&limit=${limit}${order}${filters}`;
   },
-  deleteUser: (id) => `/user/${id}`,
   createUser: '/user',
   updateUser: (id) => `/user/${id}`,
 };
@@ -38,22 +37,6 @@ function* fetchUsersSaga({ payload: { offset, limit, sorted = {}, filtered = {} 
   }
 }
 
-function* deleteUserSaga({ payload: { id, cb } }) {
-  try {
-    const response = yield ApiService.instance.delete(apiRoutes.deleteUser(id));
-    if (response.status === 202) {
-      yield put(actions.deleteUserSuccess(id));
-      cb();
-    } else {
-      throw new Error('Error during user deletion');
-    }
-  } catch (err) {
-    console.log('here');
-    yield put(actions.deleteUserFailure());
-    cb(err.response.data.error.message || err.message);
-  }
-}
-
 function* createUserSaga({ payload: { data, cb } }) {
   try {
     const response = yield ApiService.instance.post(apiRoutes.createUser, { ...data });
@@ -64,7 +47,10 @@ function* createUserSaga({ payload: { data, cb } }) {
       throw new Error('Error during user creation');
     }
   } catch (e) {
-    cb(e.response.data.error.message || e.message || e || 'Error during user deletion');
+    const message = e.response.data.error.includes('login')
+      ? 'User already exists, just inactive'
+      : e.response.data.error || e.message || e || 'Error during user deletion';
+    cb(message);
     yield put(actions.createUserFailure());
   }
 }
@@ -76,19 +62,18 @@ function* updateUserSaga({ payload: { data, cb } }) {
     const response = yield ApiService.instance.patch(apiRoutes.updateUser(userId), { ...data });
     if (response.status === 202) {
       yield put(actions.updateUserSuccess(response.data.user));
-      cb();
+      if (cb) cb();
     } else {
       throw new Error('Error during user update');
     }
   } catch (e) {
-    cb(e.response.data.error.message || e.message || e || 'Error during user deletion');
+    if (cb) cb(e.response.data.error.message || e.message || e || 'Error during user deletion');
     yield put(actions.updateUserFailure());
   }
 }
 
 export default function* userSaga() {
   yield takeLatest(actions.fetchUsers, fetchUsersSaga);
-  yield takeLatest(actions.deleteUser, deleteUserSaga);
   yield takeLatest(actions.createUser, createUserSaga);
   yield takeLatest(actions.updateUser, updateUserSaga);
 }
