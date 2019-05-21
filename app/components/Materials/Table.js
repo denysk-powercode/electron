@@ -13,17 +13,19 @@ const UsersTable = ({
   onPageSizeChange,
   openEditMaterialModal,
   openDeleteMaterialModal,
+  isAdmin,
 }) => {
+  const generatedColumns = columns(isAdmin);
   return (
     <Table
-      columns={columns}
+      columns={generatedColumns}
       isLoading={isLoading}
       data={data}
       fetchData={fetchData}
       onPageSizeChange={onPageSizeChange}
       pages={pages}
       pageSize={pageSize}
-      actions={{ openEditMaterialModal, openDeleteMaterialModal }}
+      actions={{ openEditMaterialModal, openDeleteMaterialModal, isAdmin }}
     />
   );
 };
@@ -37,6 +39,7 @@ UsersTable.propTypes = {
   onPageSizeChange: func.isRequired,
   openEditMaterialModal: func.isRequired,
   openDeleteMaterialModal: func.isRequired,
+  isAdmin: bool.isRequired,
 };
 
 export default UsersTable;

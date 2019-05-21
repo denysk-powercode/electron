@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Input, Icon, Popup } from 'semantic-ui-react';
 import styled from 'styled-components';
 
-const materialsColumns = [
+const materialsColumns = (isAdmin) => [
   {
     Header: 'Id',
     accessor: 'id',
@@ -26,6 +26,7 @@ const materialsColumns = [
   },
   {
     Header: 'Info',
+    show: !isAdmin,
     accessor: 'additional_info',
     sortable: false,
     filterable: false,
@@ -33,6 +34,7 @@ const materialsColumns = [
   },
   {
     Header: 'Controls',
+    show: isAdmin,
     accessor: '',
     sortable: false,
     filterable: false,

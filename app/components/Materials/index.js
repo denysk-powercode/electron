@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { array, bool, func, number } from 'prop-types';
+import { array, bool, func, number, object } from 'prop-types';
 import { connect } from 'react-redux';
 import { Button } from 'semantic-ui-react';
 import ContentWrapper from '../common/ContentWrapper';
@@ -11,7 +11,16 @@ import { useModals } from '../../hooks/useModals';
 import MaterialModal from './Modal';
 import DeleteModal from './DeleteModal';
 
-const Users = ({ data, isLoading, fetchMaterials, createMaterial, updateMaterial, deleteMaterial, totalCount }) => {
+const Users = ({
+  data,
+  isLoading,
+  fetchMaterials,
+  createMaterial,
+  updateMaterial,
+  deleteMaterial,
+  user,
+  totalCount,
+}) => {
   // state
   const [pageSize, setPageSize] = useState(10);
   const [materialInQuestion, setMaterialInQuestion] = useState(null);
@@ -61,6 +70,7 @@ const Users = ({ data, isLoading, fetchMaterials, createMaterial, updateMaterial
         openEditMaterialModal={openEditMaterialModal}
         openDeleteMaterialModal={openDeleteMaterialModal}
         pageSize={pageSize}
+        isAdmin={!user.role}
       />
       <MaterialModal onClose={closeNewMaterialModal} isVisible={modals.newMaterial} createMaterial={createMaterial} />
       <MaterialModal
@@ -88,12 +98,14 @@ Users.propTypes = {
   updateMaterial: func.isRequired,
   deleteMaterial: func.isRequired,
   totalCount: number.isRequired,
+  user: object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   data: selectMaterials(state),
   isLoading: state.materials.isLoading,
   totalCount: state.materials.totalCount,
+  user: state.app.user,
 });
 
 const mapDispatchToProps = {
