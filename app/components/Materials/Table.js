@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { func, bool, array, number } from 'prop-types';
-import columns from './columns';
+import generateColumns from './columns';
 
 import Table from '../common/Table';
 
@@ -15,7 +15,7 @@ const UsersTable = ({
   openDeleteMaterialModal,
   isAdmin,
 }) => {
-  const generatedColumns = columns(isAdmin);
+  const generatedColumns = useMemo(() => generateColumns(isAdmin), [isAdmin]);
   return (
     <Table
       columns={generatedColumns}

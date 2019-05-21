@@ -9,7 +9,7 @@ import Modal from '../../common/Modal';
 const DeleteMaterialModal = ({ isVisible, onClose, material, deleteMaterial }) => {
   return (
     <Modal isVisible={isVisible} onClose={onClose} title="Delete material">
-      <span>Are you sure you want to delete {material?.title}?</span>
+      <StyledSpan>Are you sure you want to delete {material?.title}?</StyledSpan>
       <ButtonsBlock>
         <Button primary onClick={() => deleteMaterial(material.id)}>
           Delete
@@ -30,6 +30,10 @@ DeleteMaterialModal.propTypes = {
 DeleteMaterialModal.defaultProps = {
   material: null,
 };
+
+const StyledSpan = styled.span`
+  font-size: 16px;
+`;
 
 const ButtonsBlock = styled.div`
   display: flex;

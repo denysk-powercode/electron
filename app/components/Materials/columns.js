@@ -17,8 +17,16 @@ const materialsColumns = (isAdmin) => [
     Filter: ({ filter, onChange }) => {
       return (
         <InputsWrapper>
-          <StyledInput placeholder="From" onChange={(e) => onChange({ from: e.target.value, to: filter?.value?.to })} />
-          <StyledInput placeholder="To" onChange={(e) => onChange({ from: filter?.value?.from, to: e.target.value })} />
+          <StyledInput
+            type="number"
+            placeholder="From"
+            onChange={(e) => onChange({ from: e.target.value, to: filter?.value?.to })}
+          />
+          <StyledInput
+            type="number"
+            placeholder="To"
+            onChange={(e) => onChange({ from: filter?.value?.from, to: e.target.value })}
+          />
         </InputsWrapper>
       );
     },
