@@ -49,7 +49,7 @@ function* createUserSaga({ payload: { data, cb } }) {
   } catch (e) {
     const message = e.response.data.error.includes('login')
       ? 'User already exists, just inactive'
-      : e.response.data.error || e.message || e || 'Error during user deletion';
+      : e.response.data.error || e.message || e;
     cb(message);
     yield put(actions.createUserFailure());
   }
@@ -67,7 +67,7 @@ function* updateUserSaga({ payload: { data, cb } }) {
       throw new Error('Error during user update');
     }
   } catch (e) {
-    if (cb) cb(e.response.data.error.message || e.message || e || 'Error during user deletion');
+    if (cb) cb(e.response.data.error.message || e.message || e);
     yield put(actions.updateUserFailure());
   }
 }

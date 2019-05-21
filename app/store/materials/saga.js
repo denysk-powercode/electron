@@ -52,10 +52,7 @@ function* createMaterialSaga({ payload: { data, cb } }) {
       throw new Error('Error during material creation');
     }
   } catch (e) {
-    const message = e.response.data.error.includes('login')
-      ? 'Material already exists, just inactive'
-      : e.response.data.error || e.message || e || 'Error during material deletion';
-    cb(message);
+    cb(e.response.data.error || e.message || e);
     yield put(actions.createMaterialFailure());
   }
 }
@@ -72,7 +69,7 @@ function* updateMaterialSaga({ payload: { data, cb } }) {
       throw new Error('Error during material update');
     }
   } catch (e) {
-    if (cb) cb(e.response.data.error.message || e.message || e || 'Error during material deletion');
+    if (cb) cb(e.response.data.error.message || e.message || e);
     yield put(actions.updateMaterialFailure());
   }
 }
