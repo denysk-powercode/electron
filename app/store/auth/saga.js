@@ -3,6 +3,7 @@ import { push } from 'connected-react-router';
 import ApiService from '../../services/api';
 import StorageService from '../../services/storage';
 import * as actions from './actions';
+import * as appActions from '../app/actions';
 import routes from '../../constants/routes';
 
 const apiRoutes = {
@@ -17,6 +18,7 @@ function* loginSaga({ payload: { username, password, cb } }) {
     if (response.status === 201) {
       StorageService.set('token', response.data.token);
       ApiService.resetToken(response.data.token);
+      yield put(appActions.setUser(response.data.user));
       yield put(actions.loginSuccess());
       yield put(push(routes.HOME));
     } else {
@@ -35,6 +37,7 @@ function* logoutSaga() {
       StorageService.set('token', null);
       yield put(actions.logoutSuccess());
       yield put(push(routes.LOGIN));
+      yield put(appActions.resetAppState());
     } else {
       throw new Error('Error during logout');
     }

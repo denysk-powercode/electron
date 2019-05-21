@@ -29,9 +29,6 @@ const Users = ({ data, isLoading, fetchMaterials, createMaterial, updateMaterial
   const onPageSizeChange = useCallback((pageSize) => setPageSize(pageSize));
   const changeUserStatus = useCallback((id, newStatus) => updateMaterial({ is_active: newStatus, id }));
 
-  console.log('totalCount', totalCount);
-  console.log('pageSize', pageSize);
-
   return (
     <ContentWrapper
       title="Users"

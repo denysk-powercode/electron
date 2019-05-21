@@ -30,9 +30,9 @@ if (process.env.NODE_ENV === 'production') {
   sourceMapSupport.install();
 }
 
-if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
-  require('electron-debug')();
-}
+// if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
+require('electron-debug')();
+// }
 
 const installExtensions = async () => {
   const installer = require('electron-devtools-installer');
@@ -55,9 +55,9 @@ app.on('window-all-closed', () => {
 });
 
 app.on('ready', async () => {
-  if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
-    await installExtensions();
-  }
+  // if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
+  await installExtensions();
+  // }
 
   mainWindow = new BrowserWindow({
     show: false,

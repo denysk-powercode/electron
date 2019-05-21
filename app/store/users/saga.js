@@ -14,7 +14,7 @@ const toQuery = (arr) => {
 const apiRoutes = {
   fetchUsers: (offset, limit, orderField, orderDirection, filtered) => {
     const order = orderField ? `&orderBy=${orderField}&order=${orderDirection}` : '';
-    const filters = Object.entries(filtered).length ? `&${toQuery(filtered)}` : '';
+    const filters = filtered.length ? `&${toQuery(filtered)}` : '';
     return `/user/?offset=${offset}&limit=${limit}${order}${filters}`;
   },
   createUser: '/user',

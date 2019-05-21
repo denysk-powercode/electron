@@ -5,6 +5,11 @@ import * as actions from './actions';
 
 const toQuery = (arr) => {
   const obj = arr.reduce((init, item) => {
+    if (item.id === 'price') {
+      init.price__from = Number(item.value.from) || 0;
+      if (item.value.to) init.price__to = Number(item.value.to);
+      return init;
+    }
     init[`${item.id}__contains`] = item.value;
     return init;
   }, {});
@@ -14,14 +19,14 @@ const toQuery = (arr) => {
 const apiRoutes = {
   fetchMaterials: (offset, limit, orderField, orderDirection, filtered) => {
     const order = orderField ? `&orderBy=${orderField}&order=${orderDirection}` : '';
-    const filters = Object.entries(filtered).length ? `&${toQuery(filtered)}` : '';
+    const filters = filtered.length ? `&${toQuery(filtered)}` : '';
     return `/material/?offset=${offset}&limit=${limit}${order}${filters}`;
   },
   createMaterial: '/material',
   updateMaterial: (id) => `/material/${id}`,
 };
 
-function* fetchMaterialsSaga({ payload: { offset, limit, sorted = {}, filtered = {} } }) {
+function* fetchMaterialsSaga({ payload: { offset, limit, sorted = {}, filtered = [] } }) {
   try {
     const orderDirection = sorted.desc ? 'desc' : 'asc';
     const response = yield ApiService.instance.get(

@@ -1,5 +1,6 @@
-import React, { useState, useCallback } from 'react';
-import { array, bool, func, number } from 'prop-types';
+import React, { useState, useCallback, useEffect } from 'react';
+import { push } from 'connected-react-router';
+import { array, bool, func, number, object } from 'prop-types';
 import { connect } from 'react-redux';
 import { Button } from 'semantic-ui-react';
 import ContentWrapper from '../common/ContentWrapper';
@@ -9,8 +10,12 @@ import { selectUsers } from '../../store/users/selectors';
 import { useModals } from '../../hooks/useModals';
 
 import UserModal from './UserModal';
+import ROUTES from '../../constants/routes';
 
-const Users = ({ data, isLoading, fetchUsers, createUser, updateUser, totalCount }) => {
+const Users = ({ data, user, isLoading, fetchUsers, createUser, updateUser, totalCount, push }) => {
+  useEffect(() => {
+    if (user.role) push(ROUTES.PAYDESK);
+  }, []);
   // state
   const [pageSize, setPageSize] = useState(10);
   const [userInQuestion, setUserInQuestion] = useState(null);
@@ -63,15 +68,18 @@ const Users = ({ data, isLoading, fetchUsers, createUser, updateUser, totalCount
 
 Users.propTypes = {
   data: array.isRequired,
+  user: object.isRequired,
   isLoading: bool.isRequired,
   fetchUsers: func.isRequired,
   createUser: func.isRequired,
   updateUser: func.isRequired,
+  push: func.isRequired,
   totalCount: number.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   data: selectUsers(state),
+  user: state.app.user,
   isLoading: state.users.isLoading,
   totalCount: state.users.totalCount,
 });
@@ -80,6 +88,7 @@ const mapDispatchToProps = {
   fetchUsers,
   createUser,
   updateUser,
+  push,
 };
 
 export default connect(
