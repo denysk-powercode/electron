@@ -34,7 +34,6 @@ const formik = withFormik({
         id: props.user.id,
       };
     }
-    console.log('data in form', data);
     submitFunc(data, (e) => {
       if (e) {
         setErrors({ networkError: e.message || e });

@@ -40,12 +40,12 @@ const materialsColumns = [
       <>
         <Button
           /* eslint-disable-next-line react/prop-types */
-          onClick={() => props.tdProps.rest.actions.openEditUserModal(props.original)}
+          onClick={() => props.tdProps.rest.actions.openEditMaterialModal(props.original)}
           icon={<Icon name="edit" />}
         />
         <Button
           /* eslint-disable-next-line react/prop-types */
-          onClick={() => props.tdProps.rest.actions.deleteUserModal(props.original)}
+          onClick={() => props.tdProps.rest.actions.openDeleteMaterialModal(props.original)}
           icon={<Icon name="remove" />}
         />
       </>

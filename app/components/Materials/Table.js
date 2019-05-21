@@ -11,8 +11,8 @@ const UsersTable = ({
   fetchData,
   pageSize,
   onPageSizeChange,
-  openEditUserModal,
-  changeUserStatus,
+  openEditMaterialModal,
+  openDeleteMaterialModal,
 }) => {
   return (
     <Table
@@ -23,7 +23,7 @@ const UsersTable = ({
       onPageSizeChange={onPageSizeChange}
       pages={pages}
       pageSize={pageSize}
-      actions={{ openEditUserModal, changeUserStatus }}
+      actions={{ openEditMaterialModal, openDeleteMaterialModal }}
     />
   );
 };
@@ -35,8 +35,8 @@ UsersTable.propTypes = {
   pageSize: number.isRequired,
   fetchData: func.isRequired,
   onPageSizeChange: func.isRequired,
-  openEditUserModal: func.isRequired,
-  changeUserStatus: func.isRequired,
+  openEditMaterialModal: func.isRequired,
+  openDeleteMaterialModal: func.isRequired,
 };
 
 export default UsersTable;

@@ -6,14 +6,12 @@ import { Button } from 'semantic-ui-react';
 import styled from 'styled-components';
 import Modal from '../../common/Modal';
 
-const UserModal = ({ isVisible, onClose, user, deleteUser }) => {
+const DeleteMaterialModal = ({ isVisible, onClose, material, deleteMaterial }) => {
   return (
-    <Modal isVisible={isVisible} onClose={onClose} title="Delete user">
-      <span>
-        Are you sure you want to delete {user?.first_name} {user?.last_name}?
-      </span>
+    <Modal isVisible={isVisible} onClose={onClose} title="Delete material">
+      <span>Are you sure you want to delete {material?.title}?</span>
       <ButtonsBlock>
-        <Button primary onClick={() => deleteUser(user.id)}>
+        <Button primary onClick={() => deleteMaterial(material.id)}>
           Delete
         </Button>
         <Button onClick={onClose}>No</Button>
@@ -22,15 +20,15 @@ const UserModal = ({ isVisible, onClose, user, deleteUser }) => {
   );
 };
 
-UserModal.propTypes = {
+DeleteMaterialModal.propTypes = {
   isVisible: bool.isRequired,
   onClose: func.isRequired,
-  deleteUser: func.isRequired,
-  user: object,
+  deleteMaterial: func.isRequired,
+  material: object,
 };
 
-UserModal.defaultProps = {
-  user: null,
+DeleteMaterialModal.defaultProps = {
+  material: null,
 };
 
 const ButtonsBlock = styled.div`
@@ -41,4 +39,4 @@ const ButtonsBlock = styled.div`
   justify-content: space-between;
 `;
 
-export default UserModal;
+export default DeleteMaterialModal;

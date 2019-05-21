@@ -18,10 +18,10 @@ const UserForm = ({ onClose, ...rest }) => {
           <StyledCustomInput label="Last name" name="last_name" placeholder="Last name" />
         </UsernamesBlock>
         <TextAreaBlock>
-          <Label>Info</Label>
+          <TextAreaLabel>Additional Info</TextAreaLabel>
           <Field
             render={({ form: { errors, submitCount }, field }) => (
-              <div className="ui form" style={{ flexGrow: 1 }}>
+              <div className="ui form" style={{ flexGrow: 1, width: '100%' }}>
                 <StyledTextArea
                   error={errors[field.name] && submitCount > 0}
                   placeholder="Additional info"
@@ -73,6 +73,7 @@ const UsernamesBlock = styled.div`
 
 const TextAreaBlock = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
   width: 50%;
 `;
@@ -83,6 +84,11 @@ const Label = styled.div`
   color: rgba(0, 0, 0, 0.6);
   font-weight: 700;
   border-radius: 3px;
+`;
+
+const TextAreaLabel = styled(Label)`
+  text-align: center;
+  width: 100%;
 `;
 
 const StyledTextArea = styled(TextArea)`

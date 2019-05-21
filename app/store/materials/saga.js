@@ -24,6 +24,7 @@ const apiRoutes = {
   },
   createMaterial: '/material',
   updateMaterial: (id) => `/material/${id}`,
+  deleteMaterial: (id) => `/material/${id}`,
 };
 
 function* fetchMaterialsSaga({ payload: { offset, limit, sorted = {}, filtered = [] } }) {
@@ -44,7 +45,7 @@ function* fetchMaterialsSaga({ payload: { offset, limit, sorted = {}, filtered =
 
 function* createMaterialSaga({ payload: { data, cb } }) {
   try {
-    const response = yield ApiService.instance.post(apiRoutes.createMaterial, { ...data });
+    const response = yield ApiService.instance.post(apiRoutes.createMaterial, data);
     if (response.status === 201) {
       yield put(actions.createMaterialSuccess(response.data.material));
       cb();
@@ -61,7 +62,7 @@ function* updateMaterialSaga({ payload: { data, cb } }) {
   try {
     const { id: materialId } = data;
     delete data.id;
-    const response = yield ApiService.instance.patch(apiRoutes.updateMaterial(materialId), { ...data });
+    const response = yield ApiService.instance.patch(apiRoutes.updateMaterial(materialId), data);
     if (response.status === 202) {
       yield put(actions.updateMaterialSuccess(response.data.material));
       if (cb) cb();
@@ -74,8 +75,23 @@ function* updateMaterialSaga({ payload: { data, cb } }) {
   }
 }
 
+function* deleteMaterialSaga({ payload: { id, cb } }) {
+  try {
+    const response = yield ApiService.instance.delete(apiRoutes.deleteMaterial(id));
+    if (response.status === 202) {
+      cb();
+      yield put(actions.deleteMaterialSuccess(id));
+    } else {
+      throw new Error('Error during material update');
+    }
+  } catch (e) {
+    yield put(actions.deleteMaterialFailure());
+  }
+}
+
 export default function* materialSaga() {
   yield takeLatest(actions.fetchMaterials, fetchMaterialsSaga);
   yield takeLatest(actions.createMaterial, createMaterialSaga);
   yield takeLatest(actions.updateMaterial, updateMaterialSaga);
+  yield takeLatest(actions.deleteMaterial, deleteMaterialSaga);
 }

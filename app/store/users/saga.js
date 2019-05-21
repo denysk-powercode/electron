@@ -39,7 +39,7 @@ function* fetchUsersSaga({ payload: { offset, limit, sorted = {}, filtered = {} 
 
 function* createUserSaga({ payload: { data, cb } }) {
   try {
-    const response = yield ApiService.instance.post(apiRoutes.createUser, { ...data });
+    const response = yield ApiService.instance.post(apiRoutes.createUser, data);
     if (response.status === 201) {
       yield put(actions.createUserSuccess(response.data.user));
       cb();
@@ -59,7 +59,7 @@ function* updateUserSaga({ payload: { data, cb } }) {
   try {
     const { id: userId } = data;
     delete data.id;
-    const response = yield ApiService.instance.patch(apiRoutes.updateUser(userId), { ...data });
+    const response = yield ApiService.instance.patch(apiRoutes.updateUser(userId), data);
     if (response.status === 202) {
       yield put(actions.updateUserSuccess(response.data.user));
       if (cb) cb();

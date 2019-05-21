@@ -4,36 +4,50 @@ import { connect } from 'react-redux';
 import { Button } from 'semantic-ui-react';
 import ContentWrapper from '../common/ContentWrapper';
 import MaterialsTable from './Table';
-import { fetchMaterials, createMaterial, updateMaterial } from '../../store/materials/actions';
+import { fetchMaterials, createMaterial, updateMaterial, deleteMaterial } from '../../store/materials/actions';
 import { selectMaterials } from '../../store/materials/selectors';
 import { useModals } from '../../hooks/useModals';
 
-const Users = ({ data, isLoading, fetchMaterials, createMaterial, updateMaterial, totalCount }) => {
+import MaterialModal from './Modal';
+import DeleteModal from './DeleteModal';
+
+const Users = ({ data, isLoading, fetchMaterials, createMaterial, updateMaterial, deleteMaterial, totalCount }) => {
   // state
   const [pageSize, setPageSize] = useState(10);
-  const [userInQuestion, setUserInQuestion] = useState(null);
-  const [modals, dispatch] = useModals('newUser', 'editUser');
+  const [materialInQuestion, setMaterialInQuestion] = useState(null);
+  const [modals, dispatch] = useModals('newMaterial', 'editMaterial', 'deleteMaterial');
 
   // modals
-  const openNewUserModal = useCallback(() => dispatch({ type: 'OPEN', name: 'newUser' }));
-  const closeNewUserModal = useCallback(() => dispatch({ type: 'CLOSE', name: 'newUser' }));
-  const openEditUserModal = useCallback((user) => {
-    setUserInQuestion(user);
-    dispatch({ type: 'OPEN', name: 'editUser' });
+  const openNewMaterialModal = useCallback(() => dispatch({ type: 'OPEN', name: 'newMaterial' }));
+  const closeNewMaterialModal = useCallback(() => dispatch({ type: 'CLOSE', name: 'newMaterial' }));
+  const openEditMaterialModal = useCallback((user) => {
+    setMaterialInQuestion(user);
+    dispatch({ type: 'OPEN', name: 'editMaterial' });
   });
-  const closeEditUserModal = useCallback(() => dispatch({ type: 'CLOSE', name: 'editUser' }));
+  const closeEditMaterialModal = useCallback(() => dispatch({ type: 'CLOSE', name: 'editMaterial' }));
+  const openDeleteMaterialModal = useCallback((material) => {
+    setMaterialInQuestion(material);
+    dispatch({ type: 'OPEN', name: 'deleteMaterial' });
+  });
+  const closeDeleteMaterialModal = useCallback(() => {
+    dispatch({ type: 'CLOSE', name: 'deleteMaterial' });
+  });
+  const onDelete = useCallback((id) => {
+    deleteMaterial(id, () => {
+      closeDeleteMaterialModal();
+    });
+  });
 
   // callbacks
   const fetchData = (state) =>
     fetchMaterials(state.page * state.pageSize, state.pageSize, state.sorted[0], state.filtered);
   const onPageSizeChange = useCallback((pageSize) => setPageSize(pageSize));
-  const changeUserStatus = useCallback((id, newStatus) => updateMaterial({ is_active: newStatus, id }));
 
   return (
     <ContentWrapper
-      title="Users"
+      title="Materials"
       actions={
-        <Button onClick={openNewUserModal} primary>
+        <Button onClick={openNewMaterialModal} primary>
           New
         </Button>
       }
@@ -44,9 +58,23 @@ const Users = ({ data, isLoading, fetchMaterials, createMaterial, updateMaterial
         isLoading={isLoading}
         fetchData={fetchData}
         onPageSizeChange={onPageSizeChange}
-        openEditUserModal={openEditUserModal}
-        changeUserStatus={changeUserStatus}
+        openEditMaterialModal={openEditMaterialModal}
+        openDeleteMaterialModal={openDeleteMaterialModal}
         pageSize={pageSize}
+      />
+      <MaterialModal onClose={closeNewMaterialModal} isVisible={modals.newMaterial} createMaterial={createMaterial} />
+      <MaterialModal
+        material={materialInQuestion}
+        isEdit
+        onClose={closeEditMaterialModal}
+        isVisible={modals.editMaterial}
+        updateMaterial={updateMaterial}
+      />
+      <DeleteModal
+        isVisible={modals.deleteMaterial}
+        onClose={closeDeleteMaterialModal}
+        material={materialInQuestion}
+        deleteMaterial={onDelete}
       />
     </ContentWrapper>
   );
@@ -58,6 +86,7 @@ Users.propTypes = {
   fetchMaterials: func.isRequired,
   createMaterial: func.isRequired,
   updateMaterial: func.isRequired,
+  deleteMaterial: func.isRequired,
   totalCount: number.isRequired,
 };
 
@@ -71,6 +100,7 @@ const mapDispatchToProps = {
   fetchMaterials,
   createMaterial,
   updateMaterial,
+  deleteMaterial,
 };
 
 export default connect(

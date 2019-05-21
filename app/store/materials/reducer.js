@@ -31,6 +31,10 @@ const materialReducer = handleActions(
     [actions.updateMaterialSuccess]: (draft, { payload: { material } }) => {
       draft.materialsMap[material.id] = material;
     },
+    [actions.deleteMaterialSuccess]: (draft, { payload: { id } }) => {
+      draft.materialsIds = draft.materialsIds.filter((item) => item !== id);
+      delete draft.materialsMap[id];
+    },
     [actions.fetchMaterialsFailure]: (draft) => {
       draft.isLoading = false;
     },
