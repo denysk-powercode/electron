@@ -2,9 +2,9 @@ import React, { useMemo } from 'react';
 import { func, bool, array, number } from 'prop-types';
 import generateColumns from './columns';
 
-import Table from '../common/Table';
+import Table from '../../common/Table';
 
-const UsersTable = ({
+const MaterialsTable = ({
   data,
   pages,
   isLoading,
@@ -12,25 +12,24 @@ const UsersTable = ({
   pageSize,
   onPageSizeChange,
   openEditMaterialModal,
-  openDeleteMaterialModal,
   isAdmin,
 }) => {
-  const generatedColumns = useMemo(() => generateColumns(isAdmin), [isAdmin]);
+  const columns = useMemo(() => generateColumns(isAdmin), [isAdmin]);
   return (
     <Table
-      columns={generatedColumns}
+      columns={columns}
       isLoading={isLoading}
       data={data}
       fetchData={fetchData}
       onPageSizeChange={onPageSizeChange}
       pages={pages}
       pageSize={pageSize}
-      actions={{ openEditMaterialModal, openDeleteMaterialModal, isAdmin }}
+      actions={{ openEditMaterialModal, isAdmin }}
     />
   );
 };
 
-UsersTable.propTypes = {
+MaterialsTable.propTypes = {
   data: array.isRequired,
   pages: number.isRequired,
   isLoading: bool.isRequired,
@@ -38,8 +37,7 @@ UsersTable.propTypes = {
   fetchData: func.isRequired,
   onPageSizeChange: func.isRequired,
   openEditMaterialModal: func.isRequired,
-  openDeleteMaterialModal: func.isRequired,
   isAdmin: bool.isRequired,
 };
 
-export default UsersTable;
+export default MaterialsTable;

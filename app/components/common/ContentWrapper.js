@@ -16,7 +16,11 @@ const ContentWrapper = ({ children, title, actions }) => {
 ContentWrapper.propTypes = {
   title: string.isRequired,
   children: any.isRequired,
-  actions: node.isRequired,
+  actions: node,
+};
+
+ContentWrapper.defaultProps = {
+  actions: null,
 };
 
 const StyledSegment = styled(Segment)`

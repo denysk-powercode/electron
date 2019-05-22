@@ -18,8 +18,6 @@ const formik = withFormik({
   }),
 
   handleSubmit: (form, { props, setSubmitting, setErrors }) => {
-    console.log('form', form);
-    console.log('props', props);
     setSubmitting(true);
     const submitFunc = props.isEdit ? props.updateMaterial : props.createMaterial;
     if (props.isEdit) form.id = props.material.id;

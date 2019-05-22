@@ -38,7 +38,9 @@ const materialsColumns = (isAdmin) => [
     accessor: 'additional_info',
     sortable: false,
     filterable: false,
-    Cell: (row) => <Popup hoverable trigger={<Icon name="info" size="large" />} content={row.value} />,
+    Cell: (row) => (
+      <Popup hoverable disabled={!row.value} trigger={<Icon name="info" size="large" />} content={row.value} />
+    ),
   },
   {
     Header: 'Controls',
@@ -47,18 +49,11 @@ const materialsColumns = (isAdmin) => [
     sortable: false,
     filterable: false,
     Cell: (props) => (
-      <>
-        <Button
-          /* eslint-disable-next-line react/prop-types */
-          onClick={() => props.tdProps.rest.actions.openEditMaterialModal(props.original)}
-          icon={<Icon name="edit" />}
-        />
-        <Button
-          /* eslint-disable-next-line react/prop-types */
-          onClick={() => props.tdProps.rest.actions.openDeleteMaterialModal(props.original)}
-          icon={<Icon name="remove" />}
-        />
-      </>
+      <Button
+        /* eslint-disable-next-line react/prop-types */
+        onClick={() => props.tdProps.rest.actions.openEditMaterialModal(props.original)}
+        icon={<Icon name="edit" />}
+      />
     ),
   },
 ];

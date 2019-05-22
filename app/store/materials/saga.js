@@ -24,10 +24,10 @@ const apiRoutes = {
   },
   createMaterial: '/material',
   updateMaterial: (id) => `/material/${id}`,
-  deleteMaterial: (id) => `/material/${id}`,
+  importCSV: '/material/import',
 };
 
-function* fetchMaterialsSaga({ payload: { offset, limit, sorted = {}, filtered = [] } }) {
+function* fetchMaterialsSaga({ payload: { offset, limit, sorted, filtered } }) {
   try {
     const orderDirection = sorted.desc ? 'desc' : 'asc';
     const response = yield ApiService.instance.get(
@@ -39,6 +39,7 @@ function* fetchMaterialsSaga({ payload: { offset, limit, sorted = {}, filtered =
       throw new Error('Error during fetching materials');
     }
   } catch (e) {
+    console.log('e', e.response);
     yield put(actions.fetchMaterialsFailure());
   }
 }
@@ -75,17 +76,19 @@ function* updateMaterialSaga({ payload: { data, cb } }) {
   }
 }
 
-function* deleteMaterialSaga({ payload: { id, cb } }) {
+function* importCSVSaga({ payload: { file } }) {
   try {
-    const response = yield ApiService.instance.delete(apiRoutes.deleteMaterial(id));
+    const formData = new FormData();
+    formData.append('csv', file);
+    const response = yield ApiService.instance.post(apiRoutes.importCSV, formData);
     if (response.status === 202) {
-      cb();
-      yield put(actions.deleteMaterialSuccess(id));
+      yield put(actions.importCSVSuccess());
+      yield put(actions.fetchMaterials());
     } else {
-      throw new Error('Error during material update');
+      throw new Error('Error during importing material from csv file');
     }
   } catch (e) {
-    yield put(actions.deleteMaterialFailure());
+    yield put(actions.importCSVFailure());
   }
 }
 
@@ -93,5 +96,5 @@ export default function* materialSaga() {
   yield takeLatest(actions.fetchMaterials, fetchMaterialsSaga);
   yield takeLatest(actions.createMaterial, createMaterialSaga);
   yield takeLatest(actions.updateMaterial, updateMaterialSaga);
-  yield takeLatest(actions.deleteMaterial, deleteMaterialSaga);
+  yield takeLatest(actions.importCSV, importCSVSaga);
 }

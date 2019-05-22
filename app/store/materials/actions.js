@@ -1,6 +1,6 @@
 import { createAction } from 'redux-actions';
 
-export const fetchMaterials = createAction('FETCH_MATERIALS', (offset, limit, sorted, filtered) => ({
+export const fetchMaterials = createAction('FETCH_MATERIALS', (offset = 0, limit = 10, sorted = {}, filtered = []) => ({
   offset,
   limit,
   sorted,
@@ -20,6 +20,6 @@ export const updateMaterial = createAction('UPDATE_MATERIAL', (data, cb) => ({ d
 export const updateMaterialSuccess = createAction('UPDATE_MATERIAL_SUCCESS', (material) => ({ material }));
 export const updateMaterialFailure = createAction('UPDATE_MATERIAL_FAILURE');
 
-export const deleteMaterial = createAction('DELETE_MATERIAL', (id, cb) => ({ id, cb }));
-export const deleteMaterialSuccess = createAction('DELETE_MATERIAL_SUCCESS', (id) => ({ id }));
-export const deleteMaterialFailure = createAction('DELETE_MATERIAL_FAILURE');
+export const importCSV = createAction('IMPORT_CSV', (file) => ({ file }));
+export const importCSVSuccess = createAction('IMPORT_CSV_SUCCESS');
+export const importCSVFailure = createAction('IMPORT_CSV_FAILURE');
