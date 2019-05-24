@@ -20,6 +20,6 @@ export const updateMaterial = createAction('UPDATE_MATERIAL', (data, cb) => ({ d
 export const updateMaterialSuccess = createAction('UPDATE_MATERIAL_SUCCESS', (material) => ({ material }));
 export const updateMaterialFailure = createAction('UPDATE_MATERIAL_FAILURE');
 
-export const importCSV = createAction('IMPORT_CSV', (file) => ({ file }));
-export const importCSVSuccess = createAction('IMPORT_CSV_SUCCESS');
-export const importCSVFailure = createAction('IMPORT_CSV_FAILURE');
+export const importCSV = createAction('IMPORT_MATERIALS_CSV', (file) => ({ file }));
+export const importCSVSuccess = createAction('IMPORT_MATERIALS_CSV_SUCCESS');
+export const importCSVFailure = createAction('IMPORT_MATERIALS_CSV_FAILURE');

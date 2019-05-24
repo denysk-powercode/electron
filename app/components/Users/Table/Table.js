@@ -2,7 +2,7 @@ import React from 'react';
 import { func, bool, array, number } from 'prop-types';
 import columns from './columns';
 
-import Table from '../common/Table';
+import Table from '../../common/Table';
 
 const UsersTable = ({
   data,

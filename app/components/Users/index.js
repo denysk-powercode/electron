@@ -4,7 +4,7 @@ import { array, bool, func, number, object } from 'prop-types';
 import { connect } from 'react-redux';
 import { Button } from 'semantic-ui-react';
 import ContentWrapper from '../common/ContentWrapper';
-import UsersTable from './Table';
+import UsersTable from './Table/Table';
 import { fetchUsers, createUser, updateUser } from '../../store/users/actions';
 import { selectUsers } from '../../store/users/selectors';
 import { useModals } from '../../hooks/useModals';
