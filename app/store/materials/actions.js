@@ -1,11 +1,15 @@
 import { createAction } from 'redux-actions';
 
-export const fetchMaterials = createAction('FETCH_MATERIALS', (offset = 0, limit = 10, sorted = {}, filtered = []) => ({
-  offset,
-  limit,
-  sorted,
-  filtered,
-}));
+export const fetchMaterials = createAction(
+  'FETCH_MATERIALS',
+  (offset = 0, limit = 10, sorted = {}, filtered = [], cb) => ({
+    offset,
+    limit,
+    sorted,
+    filtered,
+    cb,
+  })
+);
 export const fetchMaterialsSuccess = createAction('FETCH_MATERIALS_SUCCESS', (materials, totalCount) => ({
   materials,
   totalCount,

@@ -6,11 +6,11 @@ import * as actions from './actions';
 const toQuery = (arr) => {
   const obj = arr.reduce((init, item) => {
     if (item.id === 'total_price') {
-      init.total_price__from = Number(item.value.from) || 0;
-      if (item.value.to) init.total_price__to = Number(item.value.to);
+      init.client_total_price__from_agg = Number(item.value.from) || 0;
+      if (item.value.to) init.client_total_price__to_agg = Number(item.value.to);
       return init;
     }
-    init[`${item.id}__contains`] = item.value;
+    if (item.value !== '') init[`${item.id}__contains`] = item.value;
     return init;
   }, {});
   return qs.stringify(obj);
@@ -27,7 +27,7 @@ const apiRoutes = {
   importCSV: '/client/import',
 };
 
-function* fetchClientsSaga({ payload: { offset, limit, sorted, filtered } }) {
+function* fetchClientsSaga({ payload: { offset, limit, sorted, filtered, cb } }) {
   try {
     const orderDirection = sorted.desc ? 'desc' : 'asc';
     const response = yield ApiService.instance.get(
@@ -35,11 +35,12 @@ function* fetchClientsSaga({ payload: { offset, limit, sorted, filtered } }) {
     );
     if (response.status === 200) {
       yield put(actions.fetchClientsSuccess(response.data.clients, response.data.totalCount));
+      if (cb) cb(response.data.clients);
     } else {
       throw new Error('Error during fetching clients');
     }
   } catch (e) {
-    console.log('e', e.response);
+    if (cb) cb(e.response || e.message || e);
     yield put(actions.fetchClientsFailure());
   }
 }

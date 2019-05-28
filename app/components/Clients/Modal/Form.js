@@ -10,7 +10,6 @@ import ErrorDiv from '../../common/ErrorDiv';
 import formikHoc from './formik';
 
 const ClientForm = ({ onClose, ...rest }) => {
-  console.log('rest', rest);
   return (
     <StyledForm>
       <InputsBlock>

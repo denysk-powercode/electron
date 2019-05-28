@@ -10,7 +10,7 @@ const toQuery = (arr) => {
       if (item.value.to) init.price__to = Number(item.value.to);
       return init;
     }
-    init[`${item.id}__contains`] = item.value;
+    if (item.value !== '') init[`${item.id}__contains`] = item.value;
     return init;
   }, {});
   return qs.stringify(obj);
@@ -27,19 +27,20 @@ const apiRoutes = {
   importCSV: '/material/import',
 };
 
-function* fetchMaterialsSaga({ payload: { offset, limit, sorted, filtered } }) {
+function* fetchMaterialsSaga({ payload: { offset, limit, sorted, filtered, cb } }) {
   try {
     const orderDirection = sorted.desc ? 'desc' : 'asc';
     const response = yield ApiService.instance.get(
       apiRoutes.fetchMaterials(offset, limit, sorted.id, orderDirection, filtered)
     );
     if (response.status === 200) {
+      if (cb) cb(response.data.materials.map((item) => ({ ...item, weight: 1, dynamicPrice: item.price })));
       yield put(actions.fetchMaterialsSuccess(response.data.materials, response.data.totalCount));
     } else {
       throw new Error('Error during fetching materials');
     }
   } catch (e) {
-    console.log('e', e.response);
+    if (cb) cb(e.response || e.message || e);
     yield put(actions.fetchMaterialsFailure());
   }
 }

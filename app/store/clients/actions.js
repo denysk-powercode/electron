@@ -1,10 +1,11 @@
 import { createAction } from 'redux-actions';
 
-export const fetchClients = createAction('FETCH_CLIENTS', (offset = 0, limit = 10, sorted = {}, filtered = []) => ({
+export const fetchClients = createAction('FETCH_CLIENTS', (offset = 0, limit = 10, sorted = {}, filtered = [], cb) => ({
   offset,
   limit,
   sorted,
   filtered,
+  cb,
 }));
 export const fetchClientsSuccess = createAction('FETCH_CLIENTS_SUCCESS', (clients, totalCount) => ({
   clients,
