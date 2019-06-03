@@ -6,6 +6,8 @@ import path from 'path';
 import webpack from 'webpack';
 import { dependencies } from '../package.json';
 
+require('dotenv').config();
+
 export default {
   externals: [...Object.keys(dependencies || {})],
 
@@ -40,6 +42,10 @@ export default {
   plugins: [
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'production',
+    }),
+    new webpack.DefinePlugin({
+      'process.env.STAGING_API_URI': JSON.stringify(process.env.STAGING_API_URI),
+      'process.env.PROD_API_URI': JSON.stringify(process.env.PROD_API_URI),
     }),
 
     new webpack.NamedModulesPlugin(),

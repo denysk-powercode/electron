@@ -1,6 +1,6 @@
 {
   "name": "de-crm-electron",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "productName": "DE-CRM",
   "scripts": {
     "build": "concurrently \"yarn build-main\" \"yarn build-renderer\"",
