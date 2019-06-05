@@ -2,11 +2,12 @@ import { createAction } from 'redux-actions';
 
 export const fetchTransactions = createAction(
   'FETCH_TRANSACTIONS',
-  (offset = 0, limit = 10, sorted = {}, filtered = []) => ({
+  (offset = 0, limit = 10, sorted = {}, filtered = [], cb) => ({
     offset,
     limit,
     sorted,
     filtered,
+    cb,
   })
 );
 export const fetchTransactionsSuccess = createAction('FETCH_TRANSACTIONS_SUCCESS', (transactions, totalCount) => ({
@@ -16,11 +17,11 @@ export const fetchTransactionsSuccess = createAction('FETCH_TRANSACTIONS_SUCCESS
 export const fetchTransactionsFailure = createAction('FETCH_TRANSACTIONS_FAILURE');
 
 export const createTransaction = createAction('CREATE_TRANSACTION', (data, cb) => ({ data, cb }));
-export const createTransactionSuccess = createAction('CREATE_TRANSACTION_SUCCESS', (client) => ({ client }));
+export const createTransactionSuccess = createAction('CREATE_TRANSACTION_SUCCESS', (transaction) => ({ transaction }));
 export const createTransactionFailure = createAction('CREATE_TRANSACTION_FAILURE');
 
 export const updateTransaction = createAction('UPDATE_TRANSACTION', (data, cb) => ({ data, cb }));
-export const updateTransactionSuccess = createAction('UPDATE_TRANSACTION_SUCCESS', (client) => ({ client }));
+export const updateTransactionSuccess = createAction('UPDATE_TRANSACTION_SUCCESS', (transaction) => ({ transaction }));
 export const updateTransactionFailure = createAction('UPDATE_TRANSACTION_FAILURE');
 
 export const importCSV = createAction('IMPORT_TRANSACTIONS_CSV', (file) => ({ file }));

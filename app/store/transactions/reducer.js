@@ -23,11 +23,11 @@ const transactionReducer = handleActions(
         draft.transactionsIds.push(transaction.id);
       });
     },
-    [actions.createTransactionSuccess]: (draft, { payload: { transaction } }) => {
-      draft.transactionsIds.push(transaction.id);
-      draft.transactionsMap[transaction.id] = transaction;
-      draft.totalCount += 1;
-    },
+    // [actions.createTransactionSuccess]: (draft, { payload: { transaction } }) => {
+    //   draft.transactionsIds.push(transaction.id);
+    //   draft.transactionsMap[transaction.id] = transaction;
+    //   draft.totalCount += 1;
+    // },
     [actions.updateTransactionSuccess]: (draft, { payload: { transaction } }) => {
       draft.transactionsMap[transaction.id] = transaction;
     },

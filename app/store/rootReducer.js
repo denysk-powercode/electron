@@ -6,6 +6,8 @@ import auth from './auth/reducer';
 import users from './users/reducer';
 import materials from './materials/reducer';
 import clients from './clients/reducer';
+import paydesk from './paydesk/reducer';
+import transactions from './transactions/reducer';
 
 const history = createHistory();
 
@@ -15,6 +17,8 @@ const rootReducer = combineReducers({
   users,
   materials,
   clients,
+  paydesk,
+  transactions,
   router: connectRouter(history),
 });
 

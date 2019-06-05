@@ -2,6 +2,17 @@
 import { withFormik } from 'formik';
 import * as Yup from 'yup';
 
+const transformInputData = (data) => {
+  return Object.entries(data).reduce((init, [key, value]) => {
+    if (key === 'client') init.client_id = value.id;
+    if (key === 'materials')
+      init.materials = value.map((mat) => ({ transaction_price: mat.price, material_id: mat.id, weight: mat.weight }));
+    if (key === 'additional_info') init.additional_info = value;
+    if (key === 'related_transaction') init.related_transaction_id = value.id;
+    return init;
+  }, {});
+};
+
 const formik = withFormik({
   validationSchema: Yup.object().shape({
     materials: Yup.array()
@@ -33,26 +44,22 @@ const formik = withFormik({
         dynamicPrice: 0,
       },
     ],
-    client: {
-      first_name: '',
-      additional_info: '',
-    },
+    client: '',
+    related_transaction: '',
   }),
-  handleSubmit: (form) => {
-    setTimeout(() => {
-      alert(JSON.stringify(form, null, 2));
-    }, 500);
-    // setSubmitting(true);
+  handleSubmit: (form, { props, setSubmitting, setErrors }) => {
+    alert(JSON.stringify(transformInputData(form), null, 2));
+    setSubmitting(true);
     // const submitFunc = props.isEdit ? props.updateMaterial : props.createMaterial;
     // if (props.isEdit) form.id = props.material.id;
-    // submitFunc(form, (e) => {
-    //   if (e) {
-    //     setErrors({ networkError: e.message || e });
-    //   } else {
-    //     props.onClose();
-    //   }
-    //   setSubmitting(false);
-    // });
+    props.createTransaction(transformInputData(form), (e) => {
+      if (e) {
+        setErrors({ networkError: e.message || e });
+      } else {
+        props.goBack();
+      }
+      setSubmitting(false);
+    });
   },
   displayName: 'NewTransaction',
 });

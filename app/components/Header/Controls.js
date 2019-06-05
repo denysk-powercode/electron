@@ -1,23 +1,27 @@
 import React from 'react';
-import { func } from 'prop-types';
+import { func, number } from 'prop-types';
 import { Button } from 'semantic-ui-react';
 import styled from 'styled-components';
 
-const HeaderControls = ({ logout }) => {
+const HeaderControls = ({ logout, openPaydesk, closePaydesk, addCash, withdrawCash, currentPaydeskAmount }) => {
   return (
     <Container>
-      <Paydesk>Paydesk: 500</Paydesk>
+      <Paydesk>Paydesk: {currentPaydeskAmount}</Paydesk>
       <div>
-        <LeftButton onClick={() => {}} inverted>
+        <LeftButton onClick={addCash} inverted>
           Add cash
         </LeftButton>
-        <Button inverted>Withdraw cash</Button>
+        <Button inverted onClick={withdrawCash}>
+          Withdraw cash
+        </Button>
       </div>
       <div>
-        <LeftButton onClick={() => {}} inverted>
+        <LeftButton onClick={openPaydesk} inverted>
           Open paydesk
         </LeftButton>
-        <Button inverted>Close paydesk</Button>
+        <Button inverted onClick={closePaydesk}>
+          Close paydesk
+        </Button>
       </div>
       <LogoutButton inverted onClick={logout}>
         Logout
@@ -28,6 +32,11 @@ const HeaderControls = ({ logout }) => {
 
 HeaderControls.propTypes = {
   logout: func.isRequired,
+  openPaydesk: func.isRequired,
+  closePaydesk: func.isRequired,
+  addCash: func.isRequired,
+  withdrawCash: func.isRequired,
+  currentPaydeskAmount: number.isRequired,
 };
 
 const Container = styled.div`

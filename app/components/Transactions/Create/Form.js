@@ -8,68 +8,76 @@ import formikHoc from './formik';
 import CustomInput from '../../common/Input';
 import AsyncSelect from '../../common/AsyncSelect';
 
-const CreateTransaction = ({ values, loadMaterials, loadClients, openClientModal }) => {
+const CreateTransaction = ({
+  values,
+  loadMaterials,
+  loadClients,
+  loadTransactions,
+  openClientModal,
+  goBack,
+  ...rest
+}) => {
   console.log('values', values);
   const totalPrice = values.materials.reduce((init, item) => init + item.dynamicPrice, 0);
   const openModal = (e) => {
     e.preventDefault();
     openClientModal();
   };
-  return (
-    <StyledFrom>
-      <Wrapper>
-        <FieldArray
-          name="materials"
-          render={(arrayHelpers) => (
-            <LeftBlock>
-              {values.materials &&
-                values.materials.length > 0 &&
-                values.materials.map((material, index) => (
-                  <MaterialRow key={material.id}>
-                    <InputWrapper>
-                      <InputLabel>Material {index + 1}</InputLabel>
-                      <Field
-                        name={`materials.${index}`}
-                        render={({ field, form }) => (
-                          <AsyncSelect field={field} form={form} loader={loadMaterials} placeholder="Material name" />
-                        )}
-                      />
-                    </InputWrapper>
-                    <InputWrapper>
-                      <InputLabel>Weight {index + 1}</InputLabel>
-                      <StyledInput
-                        type="number"
-                        name={`materials.${index}.weight`}
-                        customOnChange={(value, field, form) => {
-                          // on weight change - automatically change price input (dynamicPrice field) by multiplying
-                          // weight and initial price (price per kg)
-                          const initialPrice = form.values.materials[index]?.price;
-                          form.setFieldValue(
-                            `materials.${index}.dynamicPrice`,
-                            value === 0 ? initialPrice : value * initialPrice
-                          );
-                        }}
-                      />
-                    </InputWrapper>
-                    <InputWrapper>
-                      <InputLabel>Price {index + 1}</InputLabel>
-                      <StyledInput disabled name={`materials.${index}.dynamicPrice`} />
-                    </InputWrapper>
-                    <Button primary onClick={() => arrayHelpers.remove(index)} icon={<Icon name="minus" />} />
-                  </MaterialRow>
-                ))}
-              <StyledButton
-                primary
-                onClick={(e) => {
-                  e.preventDefault();
-                  arrayHelpers.push({ id: Math.random(), title: '', weight: 0, price: 0, dynamicPrice: 0 });
-                }}
-                icon={<Icon name="add" />}
-                content="Add material"
+
+  const renderFieldArray = (arrayHelpers) => (
+    <LeftBlock>
+      {values.materials &&
+        values.materials.length > 0 &&
+        values.materials.map((material, index) => (
+          <MaterialRow key={material.id}>
+            <InputWrapper>
+              <InputLabel>Material {index + 1}</InputLabel>
+              <Field
+                name={`materials.${index}`}
+                render={({ field, form }) => (
+                  <AsyncSelect field={field} form={form} loader={loadMaterials} placeholder="Material name" />
+                )}
               />
-            </LeftBlock>
-          )}
-        />
+            </InputWrapper>
+            <InputWrapper>
+              <InputLabel>Weight {index + 1}</InputLabel>
+              <StyledInput
+                type="number"
+                name={`materials.${index}.weight`}
+                customOnChange={(value, field, form) => {
+                  // on weight change - automatically change price input (dynamicPrice field) by multiplying
+                  // weight and initial price (price per kg)
+                  const initialPrice = form.values.materials[index]?.price;
+                  form.setFieldValue(
+                    `materials.${index}.dynamicPrice`,
+                    value === 0 ? initialPrice : value * initialPrice
+                  );
+                }}
+              />
+            </InputWrapper>
+            <InputWrapper>
+              <InputLabel>Price {index + 1}</InputLabel>
+              <StyledInput disabled name={`materials.${index}.dynamicPrice`} />
+            </InputWrapper>
+            <Button primary onClick={() => arrayHelpers.remove(index)} icon={<Icon name="minus" />} />
+          </MaterialRow>
+        ))}
+      <StyledButton
+        primary
+        onClick={(e) => {
+          e.preventDefault();
+          arrayHelpers.push({ id: Math.random(), title: '', weight: 0, price: 0, dynamicPrice: 0 });
+        }}
+        icon={<Icon name="add" />}
+        content="Add material"
+      />
+    </LeftBlock>
+  );
+
+  return (
+    <StyledFrom onSubmit={rest.handleSubmit}>
+      <Wrapper>
+        <FieldArray name="materials" render={renderFieldArray} />
         <RightBlock>
           <InputWrapper>
             <InputLabel>Client</InputLabel>
@@ -86,6 +94,21 @@ const CreateTransaction = ({ values, loadMaterials, loadClients, openClientModal
               )}
             />
             <StyledButton leftmargin="true" primary icon={<Icon name="add" />} onClick={openModal} />
+          </InputWrapper>
+          <InputWrapper>
+            <InputLabel wide>Related to transaction</InputLabel>
+            <Field
+              name="related_transaction"
+              render={({ field, form }) => (
+                <AsyncSelect
+                  field={field}
+                  form={form}
+                  loader={loadTransactions}
+                  labelName="id"
+                  placeholder="Related transaction"
+                />
+              )}
+            />
           </InputWrapper>
           <TextAreaBlock>
             <TextAreaLabel>Additional Info</TextAreaLabel>
@@ -106,9 +129,10 @@ const CreateTransaction = ({ values, loadMaterials, loadClients, openClientModal
         </RightBlock>
       </Wrapper>
       <Price>Total price {totalPrice}</Price>
-      <StyledButton primary type="submit">
-        Submit
-      </StyledButton>
+      <ButtonsBlock>
+        <Button primary type="submit" content="Submit" />
+        <Button content="Cancel" onClick={goBack} />
+      </ButtonsBlock>
     </StyledFrom>
   );
 };
@@ -117,12 +141,15 @@ CreateTransaction.propTypes = {
   values: object.isRequired,
   loadMaterials: func.isRequired,
   loadClients: func.isRequired,
+  loadTransactions: func.isRequired,
   openClientModal: func.isRequired,
+  goBack: func.isRequired,
 };
 
 const StyledFrom = styled(Form)`
   display: flex;
   flex-direction: column;
+  padding-right: 50px;
 `;
 
 const Wrapper = styled.div`
@@ -160,7 +187,7 @@ const InputWrapper = styled.div`
 const InputLabel = styled.label`
   font-weight: bold;
   margin-right: 5px;
-  min-width: 70px;
+  min-width: ${(props) => (props.wide ? '150px' : '70px')};
 `;
 
 const StyledInput = styled(CustomInput)`
@@ -209,6 +236,13 @@ const Price = styled.div`
   justify-content: center;
   font-size: 16px;
   margin: 25px 0;
+`;
+
+const ButtonsBlock = styled.div`
+  width: 20%;
+  align-self: center;
+  display: flex;
+  justify-content: space-between;
 `;
 
 export default formikHoc(CreateTransaction);

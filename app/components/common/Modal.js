@@ -3,7 +3,7 @@ import { func, bool, any, string } from 'prop-types';
 import { Modal, Header } from 'semantic-ui-react';
 import styled from 'styled-components';
 
-const UserModal = ({ isVisible, onClose, title, children }) => {
+const CustomModal = ({ isVisible, onClose, title, children }) => {
   return (
     <Modal open={isVisible} onClose={onClose} closeIcon closeOnDimmerClick={false}>
       <Container>
@@ -14,14 +14,14 @@ const UserModal = ({ isVisible, onClose, title, children }) => {
   );
 };
 
-UserModal.propTypes = {
+CustomModal.propTypes = {
   isVisible: bool.isRequired,
   onClose: func.isRequired,
   title: string,
   children: any,
 };
 
-UserModal.defaultProps = {
+CustomModal.defaultProps = {
   children: null,
   title: '',
 };
@@ -37,4 +37,4 @@ const StyledHeader = styled(Header)`
   align-self: center;
 `;
 
-export default UserModal;
+export default CustomModal;

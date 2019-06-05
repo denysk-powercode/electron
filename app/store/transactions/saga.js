@@ -10,6 +10,10 @@ const toQuery = (arr) => {
       if (item.value.to) init.total_price__to = Number(item.value.to);
       return init;
     }
+    if (item.id === 'id' && item.value !== '') {
+      init.transaction_id__equals_agg = item.value;
+      return init;
+    }
     init[`${item.id}__contains`] = item.value;
     return init;
   }, {});
@@ -27,7 +31,7 @@ const apiRoutes = {
   importCSV: '/transaction/import',
 };
 
-function* fetchTransactionsSaga({ payload: { offset, limit, sorted, filtered } }) {
+function* fetchTransactionsSaga({ payload: { offset, limit, sorted, filtered, cb } }) {
   try {
     const orderDirection = sorted.desc ? 'desc' : 'asc';
     const response = yield ApiService.instance.get(
@@ -35,11 +39,13 @@ function* fetchTransactionsSaga({ payload: { offset, limit, sorted, filtered } }
     );
     if (response.status === 200) {
       yield put(actions.fetchTransactionsSuccess(response.data.transactions, response.data.totalCount));
+      if (cb) cb(response.data.transactions);
     } else {
       throw new Error('Error during fetching transactions');
     }
   } catch (e) {
     yield put(actions.fetchTransactionsFailure());
+    if (cb) cb([]);
   }
 }
 
@@ -47,7 +53,7 @@ function* createTransactionSaga({ payload: { data, cb } }) {
   try {
     const response = yield ApiService.instance.post(apiRoutes.createTransaction, data);
     if (response.status === 201) {
-      yield put(actions.createTransactionSuccess(response.data.transaction));
+      yield put(actions.createTransactionSuccess(response.data.transactions[0]));
       cb();
     } else {
       throw new Error('Error during transaction creation');
