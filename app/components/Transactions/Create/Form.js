@@ -17,7 +17,6 @@ const CreateTransaction = ({
   goBack,
   ...rest
 }) => {
-  console.log('values', values);
   const totalPrice = values.materials.reduce((init, item) => init + item.dynamicPrice, 0);
   const openModal = (e) => {
     e.preventDefault();
@@ -79,7 +78,7 @@ const CreateTransaction = ({
       <Wrapper>
         <FieldArray name="materials" render={renderFieldArray} />
         <RightBlock>
-          <InputWrapper>
+          <InputWrapper margBottom>
             <InputLabel>Client</InputLabel>
             <Field
               name="client"
@@ -95,7 +94,7 @@ const CreateTransaction = ({
             />
             <StyledButton leftmargin="true" primary icon={<Icon name="add" />} onClick={openModal} />
           </InputWrapper>
-          <InputWrapper>
+          <InputWrapper margBottom>
             <InputLabel wide>Related to transaction</InputLabel>
             <Field
               name="related_transaction"
@@ -182,6 +181,7 @@ const InputWrapper = styled.div`
   align-items: center;
   margin-right: 10px;
   width: 100%;
+  ${(props) => props.margBottom && 'margin-bottom: 10px'}
 `;
 
 const InputLabel = styled.label`

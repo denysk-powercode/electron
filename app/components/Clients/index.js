@@ -32,7 +32,7 @@ const Clients = ({ data, isLoading, fetchClients, createClient, updateClient, im
   return (
     <ContentWrapper
       title="Clients"
-      actions={!user.role ? <TableActions openNewClientModal={openNewClientModal} importCSV={importCSV} /> : null}
+      actions={<TableActions openNewClientModal={openNewClientModal} importCSV={importCSV} />}
     >
       <ClientsTable
         data={data}

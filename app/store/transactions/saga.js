@@ -5,16 +5,34 @@ import * as actions from './actions';
 
 const toQuery = (arr) => {
   const obj = arr.reduce((init, item) => {
-    if (item.id === 'total_price') {
-      init.total_price__from = Number(item.value.from) || 0;
-      if (item.value.to) init.total_price__to = Number(item.value.to);
-      return init;
+    switch (item.id) {
+      case 'created_at': {
+        if (item.value.from) init.created_at__from = item.value.from;
+        if (item.value.to) init.created_at__to = item.value.to;
+        break;
+      }
+      case 'client':
+      case 'user':
+      case 'material': {
+        const helper = item.id === 'material' ? 'title' : 'names';
+        const fieldName = `$${item.id[0].toUpperCase()}${item.id.slice(1)}.${helper}$__contains`;
+        if (item.value) init[fieldName] = item.value;
+        break;
+      }
+      case 'total_weight':
+      case 'total_price': {
+        if (item.value.from) init[`${item.id}__from_agg`] = item.value.from;
+        if (item.value.to) init[`${item.id}__to_agg`] = item.value.to;
+        break;
+      }
+      case 'id': {
+        if (item.value) init.transaction_id__equals_agg = item.value;
+        break;
+      }
+      default: {
+        init[`${item.id}__contains`] = item.value;
+      }
     }
-    if (item.id === 'id' && item.value !== '') {
-      init.transaction_id__equals_agg = item.value;
-      return init;
-    }
-    init[`${item.id}__contains`] = item.value;
     return init;
   }, {});
   return qs.stringify(obj);
@@ -81,25 +99,8 @@ function* updateTransactionSaga({ payload: { data, cb } }) {
   }
 }
 
-function* importCSVSaga({ payload: { file } }) {
-  try {
-    const formData = new FormData();
-    formData.append('csv', file);
-    const response = yield ApiService.instance.post(apiRoutes.importCSV, formData);
-    if (response.status === 202) {
-      yield put(actions.importCSVSuccess());
-      yield put(actions.fetchTransactions());
-    } else {
-      throw new Error('Error during importing transaction from csv file');
-    }
-  } catch (e) {
-    yield put(actions.importCSVFailure());
-  }
-}
-
 export default function* transactionSaga() {
   yield takeLatest(actions.fetchTransactions, fetchTransactionsSaga);
   yield takeLatest(actions.createTransaction, createTransactionSaga);
   yield takeLatest(actions.updateTransaction, updateTransactionSaga);
-  yield takeLatest(actions.importCSV, importCSVSaga);
 }

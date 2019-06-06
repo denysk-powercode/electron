@@ -48,7 +48,6 @@ const formik = withFormik({
     related_transaction: '',
   }),
   handleSubmit: (form, { props, setSubmitting, setErrors }) => {
-    alert(JSON.stringify(transformInputData(form), null, 2));
     setSubmitting(true);
     // const submitFunc = props.isEdit ? props.updateMaterial : props.createMaterial;
     // if (props.isEdit) form.id = props.material.id;

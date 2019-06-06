@@ -35,7 +35,7 @@ const CreateTransaction = ({
     push(routes.TRANSACTIONS);
   };
   return (
-    <ContentWrapper title="New Transaction">
+    <ContentWrapper title="New Transaction" backFunc={goBack}>
       <NewTransactionForm
         loadMaterials={loadMaterials}
         loadClients={loadClients}

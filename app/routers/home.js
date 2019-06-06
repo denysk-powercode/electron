@@ -5,6 +5,7 @@ import routes from '../constants/routes';
 import Users from '../components/Users';
 import Materials from '../components/Materials';
 import Clients from '../components/Clients';
+import Transactions from '../components/Transactions';
 import NewTransaction from '../components/Transactions/Create';
 import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
@@ -15,7 +16,8 @@ const Home = () => {
       <Header />
       <Sidebar>
         <Switch>
-          <Route path={routes.TRANSACTIONS} component={NewTransaction} />
+          <Route path={routes.TRANSACTIONS} exact component={Transactions} />
+          <Route path={routes.NEW_TRANSACTION} component={NewTransaction} />
           <Route path={routes.CLIENTS} component={Clients} />
           <Route path={routes.MATERIALS} component={Materials} />
           <Route path={routes.PAYDESK} component={() => <div>paydesk</div>} />

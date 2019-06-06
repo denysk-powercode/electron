@@ -6,7 +6,7 @@ const Table = ({ data, pages, isLoading, fetchData, pageSize, onPageSizeChange, 
   return (
     <ReactTable
       columns={columns}
-      resolveData={(data) => (data.length > pageSize ? data.slice(0, pageSize) : data)} // add new rows at the end
+      resolveData={(data) => (data.length > pageSize ? data.slice(0, pageSize) : data)} // add new rows to the end
       manual // Forces table not to paginate or sort automatically, so we can handle it server-side
       data={data}
       pages={pages} // Display the total number of pages

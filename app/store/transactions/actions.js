@@ -23,7 +23,3 @@ export const createTransactionFailure = createAction('CREATE_TRANSACTION_FAILURE
 export const updateTransaction = createAction('UPDATE_TRANSACTION', (data, cb) => ({ data, cb }));
 export const updateTransactionSuccess = createAction('UPDATE_TRANSACTION_SUCCESS', (transaction) => ({ transaction }));
 export const updateTransactionFailure = createAction('UPDATE_TRANSACTION_FAILURE');
-
-export const importCSV = createAction('IMPORT_TRANSACTIONS_CSV', (file) => ({ file }));
-export const importCSVSuccess = createAction('IMPORT_TRANSACTIONS_CSV_SUCCESS');
-export const importCSVFailure = createAction('IMPORT_TRANSACTIONS_CSV_FAILURE');

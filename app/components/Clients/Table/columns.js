@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Input, Icon, Popup } from 'semantic-ui-react';
 import styled from 'styled-components';
 
-const clientsColumns = (isAdmin) => [
+const clientsColumns = [
   {
     Header: 'Id',
     accessor: 'id',
@@ -38,7 +38,6 @@ const clientsColumns = (isAdmin) => [
   },
   {
     Header: 'Info',
-    show: !isAdmin,
     accessor: 'additional_info',
     sortable: false,
     filterable: false,
@@ -48,7 +47,6 @@ const clientsColumns = (isAdmin) => [
   },
   {
     Header: 'Controls',
-    show: isAdmin,
     accessor: '',
     sortable: false,
     filterable: false,

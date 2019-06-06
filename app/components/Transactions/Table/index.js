@@ -4,16 +4,7 @@ import columns from './columns';
 
 import Table from '../../common/Table';
 
-const ClientsTable = ({
-  data,
-  pages,
-  isLoading,
-  fetchData,
-  pageSize,
-  onPageSizeChange,
-  openEditClientModal,
-  isAdmin,
-}) => {
+const TransactionsTable = ({ data, pages, isLoading, fetchData, pageSize, onPageSizeChange, openPrint, isAdmin }) => {
   return (
     <Table
       columns={columns}
@@ -23,20 +14,20 @@ const ClientsTable = ({
       onPageSizeChange={onPageSizeChange}
       pages={pages}
       pageSize={pageSize}
-      actions={{ openEditClientModal, isAdmin }}
+      actions={{ openPrint, isAdmin }}
     />
   );
 };
 
-ClientsTable.propTypes = {
+TransactionsTable.propTypes = {
   data: array.isRequired,
   pages: number.isRequired,
   isLoading: bool.isRequired,
   pageSize: number.isRequired,
   fetchData: func.isRequired,
   onPageSizeChange: func.isRequired,
-  openEditClientModal: func.isRequired,
+  openPrint: func.isRequired,
   isAdmin: bool.isRequired,
 };
 
-export default ClientsTable;
+export default TransactionsTable;
