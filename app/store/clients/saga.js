@@ -77,14 +77,14 @@ function* updateClientSaga({ payload: { data, cb } }) {
   }
 }
 
-function* importCSVSaga({ payload: { file } }) {
+function* importCSVSaga({ payload: { file, pageSize } }) {
   try {
     const formData = new FormData();
     formData.append('csv', file);
     const response = yield ApiService.instance.post(apiRoutes.importCSV, formData);
     if (response.status === 202) {
       yield put(actions.importCSVSuccess());
-      yield put(actions.fetchClients());
+      yield put(actions.fetchClients(0, pageSize));
     } else {
       throw new Error('Error during importing client from csv file');
     }

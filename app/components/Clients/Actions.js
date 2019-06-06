@@ -13,12 +13,14 @@ const TableActions = ({ openNewClientModal, importCSV }) => {
   return (
     <Container>
       <InvisibleInput type="file" ref={input} accept=".csv" onChange={onFileInputChange} />
-      <Button animated="fade" type="file" onClick={onImportClick}>
-        <Button.Content visible>Import CSV</Button.Content>
-        <Button.Content hidden>
-          <Icon name="download" />
-        </Button.Content>
-      </Button>
+      {importCSV && (
+        <Button animated="fade" type="file" onClick={onImportClick}>
+          <Button.Content visible>Import CSV</Button.Content>
+          <Button.Content hidden>
+            <Icon name="download" />
+          </Button.Content>
+        </Button>
+      )}
       <RightButton onClick={openNewClientModal} primary>
         New
       </RightButton>
@@ -28,7 +30,11 @@ const TableActions = ({ openNewClientModal, importCSV }) => {
 
 TableActions.propTypes = {
   openNewClientModal: func.isRequired,
-  importCSV: func.isRequired,
+  importCSV: func,
+};
+
+TableActions.defaultProps = {
+  importCSV: undefined,
 };
 
 const Container = styled.div`

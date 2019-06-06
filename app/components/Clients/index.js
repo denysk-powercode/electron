@@ -28,11 +28,19 @@ const Clients = ({ data, isLoading, fetchClients, createClient, updateClient, im
   const fetchData = (state) =>
     fetchClients(state.page * state.pageSize, state.pageSize, state.sorted[0], state.filtered);
   const onPageSizeChange = useCallback((pageSize) => setPageSize(pageSize));
-
+  const onImport = (file) => {
+    importCSV(file, pageSize);
+  };
   return (
     <ContentWrapper
       title="Clients"
-      actions={<TableActions openNewClientModal={openNewClientModal} importCSV={importCSV} />}
+      actions={
+        !user.role ? (
+          <TableActions openNewClientModal={openNewClientModal} importCSV={onImport} />
+        ) : (
+          <TableActions openNewClientModal={openNewClientModal} />
+        )
+      }
     >
       <ClientsTable
         data={data}

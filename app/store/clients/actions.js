@@ -21,6 +21,6 @@ export const updateClient = createAction('UPDATE_CLIENT', (data, cb) => ({ data,
 export const updateClientSuccess = createAction('UPDATE_CLIENT_SUCCESS', (client) => ({ client }));
 export const updateClientFailure = createAction('UPDATE_CLIENT_FAILURE');
 
-export const importCSV = createAction('IMPORT_CLIENTS_CSV', (file) => ({ file }));
+export const importCSV = createAction('IMPORT_CLIENTS_CSV', (file, pageSize) => ({ file, pageSize }));
 export const importCSVSuccess = createAction('IMPORT_CLIENTS_CSV_SUCCESS');
 export const importCSVFailure = createAction('IMPORT_CLIENTS_CSV_FAILURE');
