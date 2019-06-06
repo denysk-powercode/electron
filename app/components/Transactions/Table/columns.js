@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Input, Icon, Popup } from 'semantic-ui-react';
 import styled from 'styled-components';
 import moment from 'moment';
 
+const validate = (num) => (Math.sign(Number(num)) === -1 || Number(num) < 0 ? 0 : num);
 const materialsColumns = [
   {
     Header: 'Id',
@@ -62,17 +63,27 @@ const materialsColumns = [
     accessor: 'total_weight',
     /* eslint-disable-next-line react/prop-types */
     Filter: ({ filter, onChange }) => {
+      const [from, setFrom] = useState('');
+      const [to, setTo] = useState('');
       return (
         <InputsWrapper>
           <StyledInput
             type="number"
+            value={from}
             placeholder="From"
-            onChange={(e) => onChange({ from: e.target.value, to: filter?.value?.to })}
+            onChange={(e) => {
+              setFrom(validate(e.target.value));
+              onChange({ from: validate(e.target.value), to: validate(filter?.value?.to) });
+            }}
           />
           <StyledInput
             type="number"
+            value={to}
             placeholder="To"
-            onChange={(e) => onChange({ from: filter?.value?.from, to: e.target.value })}
+            onChange={(e) => {
+              setTo(validate(e.target.value));
+              onChange({ from: validate(filter?.value?.from), to: validate(e.target.value) });
+            }}
           />
         </InputsWrapper>
       );
@@ -83,17 +94,27 @@ const materialsColumns = [
     accessor: 'total_price',
     /* eslint-disable-next-line react/prop-types */
     Filter: ({ filter, onChange }) => {
+      const [from, setFrom] = useState('');
+      const [to, setTo] = useState('');
       return (
         <InputsWrapper>
           <StyledInput
             type="number"
+            value={from}
             placeholder="From"
-            onChange={(e) => onChange({ from: e.target.value, to: filter?.value?.to })}
+            onChange={(e) => {
+              setFrom(validate(e.target.value));
+              onChange({ from: validate(filter?.value?.from), to: validate(e.target.value) });
+            }}
           />
           <StyledInput
             type="number"
+            value={to}
             placeholder="To"
-            onChange={(e) => onChange({ from: filter?.value?.from, to: e.target.value })}
+            onChange={(e) => {
+              setTo(validate(e.target.value));
+              onChange({ from: validate(filter?.value?.from), to: validate(e.target.value) });
+            }}
           />
         </InputsWrapper>
       );
