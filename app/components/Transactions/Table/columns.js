@@ -104,7 +104,7 @@ const materialsColumns = [
             placeholder="From"
             onChange={(e) => {
               setFrom(validate(e.target.value));
-              onChange({ from: validate(filter?.value?.from), to: validate(e.target.value) });
+              onChange({ from: validate(e.target.value), to: validate(filter?.value?.to) });
             }}
           />
           <StyledInput
