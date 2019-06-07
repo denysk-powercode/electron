@@ -8,15 +8,7 @@ import formikHoc from './formik';
 import CustomInput from '../../common/Input';
 import AsyncSelect from '../../common/AsyncSelect';
 
-const CreateTransaction = ({
-  values,
-  loadMaterials,
-  loadClients,
-  loadTransactions,
-  openClientModal,
-  goBack,
-  ...rest
-}) => {
+const CreateTransaction = ({ values, loadMaterials, loadClients, openClientModal, goBack, ...rest }) => {
   const totalPrice = values.materials.reduce((init, item) => init + item.dynamicPrice, 0);
   const openModal = (e) => {
     e.preventDefault();
@@ -94,21 +86,6 @@ const CreateTransaction = ({
             />
             <StyledButton leftmargin="true" primary icon={<Icon name="add" />} onClick={openModal} />
           </InputWrapper>
-          <InputWrapper margBottom>
-            <InputLabel wide>Related to transaction</InputLabel>
-            <Field
-              name="related_transaction"
-              render={({ field, form }) => (
-                <AsyncSelect
-                  field={field}
-                  form={form}
-                  loader={loadTransactions}
-                  labelName="id"
-                  placeholder="Related transaction"
-                />
-              )}
-            />
-          </InputWrapper>
           <TextAreaBlock>
             <TextAreaLabel>Additional Info</TextAreaLabel>
             <Field
@@ -140,7 +117,6 @@ CreateTransaction.propTypes = {
   values: object.isRequired,
   loadMaterials: func.isRequired,
   loadClients: func.isRequired,
-  loadTransactions: func.isRequired,
   openClientModal: func.isRequired,
   goBack: func.isRequired,
 };

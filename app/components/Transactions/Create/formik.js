@@ -8,7 +8,6 @@ const transformInputData = (data) => {
     if (key === 'materials')
       init.materials = value.map((mat) => ({ transaction_price: mat.price, material_id: mat.id, weight: mat.weight }));
     if (key === 'additional_info') init.additional_info = value;
-    if (key === 'related_transaction') init.related_transaction_id = value.id;
     return init;
   }, {});
 };
@@ -30,11 +29,7 @@ const formik = withFormik({
       first_name: Yup.string().required('Required'),
     }),
   }),
-  // enableReinitialize: true,
   mapPropsToValues: () => ({
-    // title: material?.title || '',
-    // price: material?.price || '',
-    // additional_info: material?.additional_info || '',
     materials: [
       {
         id: Math.random(),
@@ -45,12 +40,9 @@ const formik = withFormik({
       },
     ],
     client: '',
-    related_transaction: '',
   }),
   handleSubmit: (form, { props, setSubmitting, setErrors }) => {
     setSubmitting(true);
-    // const submitFunc = props.isEdit ? props.updateMaterial : props.createMaterial;
-    // if (props.isEdit) form.id = props.material.id;
     props.createTransaction(transformInputData(form), (e) => {
       if (e) {
         setErrors({ networkError: e.message || e });

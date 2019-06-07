@@ -54,7 +54,7 @@ const apiRoutes = {
   importCSV: '/transaction/import',
 };
 
-function* fetchTransactionsSaga({ payload: { offset, limit, sorted, filtered, cb } }) {
+function* fetchTransactionsSaga({ payload: { offset, limit, sorted, filtered } }) {
   try {
     const orderDirection = sorted.desc ? 'desc' : 'asc';
     const response = yield ApiService.instance.get(
@@ -62,13 +62,11 @@ function* fetchTransactionsSaga({ payload: { offset, limit, sorted, filtered, cb
     );
     if (response.status === 200) {
       yield put(actions.fetchTransactionsSuccess(response.data.transactions, response.data.totalCount));
-      if (cb) cb(response.data.transactions);
     } else {
       throw new Error('Error during fetching transactions');
     }
   } catch (e) {
     yield put(actions.fetchTransactionsFailure());
-    if (cb) cb([]);
   }
 }
 

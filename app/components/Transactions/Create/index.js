@@ -8,27 +8,17 @@ import CreateClientModal from '../../Clients/Modal';
 import NewTransactionForm from './Form';
 import { fetchMaterials } from '../../../store/materials/actions';
 import { fetchClients, createClient } from '../../../store/clients/actions';
-import { fetchTransactions, createTransaction } from '../../../store/transactions/actions';
+import { createTransaction } from '../../../store/transactions/actions';
 
 import routes from '../../../constants/routes';
 
-const CreateTransaction = ({
-  fetchMaterials,
-  fetchClients,
-  fetchTransactions,
-  createClient,
-  createTransaction,
-  push,
-}) => {
+const CreateTransaction = ({ fetchMaterials, fetchClients, createClient, createTransaction, push }) => {
   const [isClientModalVisible, setModalState] = useState(false);
   const loadMaterials = useCallback((inputValue, callback) => {
     fetchMaterials(0, 1000, {}, [{ id: 'title', value: inputValue }], callback);
   });
   const loadClients = useCallback((inputValue, callback) => {
     fetchClients(0, 1000, {}, [{ id: 'first_name', value: inputValue }], callback);
-  });
-  const loadTransactions = useCallback((inputValue, callback) => {
-    fetchTransactions(0, 1000, {}, [{ id: 'id', value: inputValue }], callback);
   });
   const goBack = (e) => {
     if (e) e.preventDefault();
@@ -39,7 +29,6 @@ const CreateTransaction = ({
       <NewTransactionForm
         loadMaterials={loadMaterials}
         loadClients={loadClients}
-        loadTransactions={loadTransactions}
         openClientModal={useCallback(() => setModalState(true))}
         createTransaction={createTransaction}
         goBack={goBack}
@@ -57,7 +46,6 @@ CreateTransaction.propTypes = {
   fetchMaterials: func.isRequired,
   createClient: func.isRequired,
   fetchClients: func.isRequired,
-  fetchTransactions: func.isRequired,
   createTransaction: func.isRequired,
   push: func.isRequired,
 };
@@ -66,7 +54,6 @@ const mapDispatchToProps = {
   fetchMaterials,
   fetchClients,
   createClient,
-  fetchTransactions,
   createTransaction,
   push,
 };

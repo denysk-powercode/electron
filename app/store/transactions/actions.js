@@ -2,12 +2,11 @@ import { createAction } from 'redux-actions';
 
 export const fetchTransactions = createAction(
   'FETCH_TRANSACTIONS',
-  (offset = 0, limit = 10, sorted = {}, filtered = [], cb) => ({
+  (offset = 0, limit = 10, sorted = {}, filtered = []) => ({
     offset,
     limit,
     sorted,
     filtered,
-    cb,
   })
 );
 export const fetchTransactionsSuccess = createAction('FETCH_TRANSACTIONS_SUCCESS', (transactions, totalCount) => ({
