@@ -10,12 +10,22 @@ const initialState = {
 const paydeskReducer = handleActions(
   {
     [actions.openPaydeskSuccess]: (draft, { payload: { amount } }) => {
-      draft.amount = amount;
+      draft.amount = Number(amount);
       draft.isOpen = true;
     },
     [actions.closePaydeskSuccess]: (draft) => {
       draft.amount = 0;
       draft.isOpen = false;
+    },
+    [actions.checkPaydeskStateSuccess]: (draft, { payload: { isOpen, amount } }) => {
+      draft.isOpen = isOpen;
+      draft.amount = amount;
+    },
+    [actions.addCashSuccess]: (draft, { payload: { amount } }) => {
+      draft.amount += amount;
+    },
+    [actions.withdrawCashSuccess]: (draft, { payload: { amount } }) => {
+      draft.amount -= amount;
     },
   },
   initialState

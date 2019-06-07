@@ -2,38 +2,74 @@ import React from 'react';
 import { func, bool, number } from 'prop-types';
 import styled from 'styled-components';
 import { Input, Button, TextArea } from 'semantic-ui-react';
+import { Form, Formik } from 'formik';
+import * as Yup from 'yup';
 
 import Modal from '../../common/Modal';
-import { useInputs } from '../../../hooks/useInputs';
 
-const WithdrawCash = ({ isVisible, onClose, currentPaydeskAmount }) => {
-  const inputs = useInputs('amount', 'source', 'info');
-  const amountAfter = Number(currentPaydeskAmount) - Number(inputs.amount.value);
+const WithdrawCashSchema = Yup.object().shape({
+  amount: Yup.number()
+    .positive('Cannot be negative')
+    .required('Amount is required'),
+  source: Yup.string().required('Source is required'),
+  additional_info: Yup.string(),
+});
+
+const WithdrawCash = ({ isVisible, onClose, currentPaydeskAmount, onWithdrawCash }) => {
   return (
     <Modal isVisible={isVisible} onClose={onClose} title="Withdraw cash">
-      <Container>
-        <ContentWrapper>
-          <InputsBlock>
-            <StyledInput type="number" label="Amount" {...inputs.amount} placeholder="Amount to withdraw" />
-            <StyledInput label="Source" {...inputs.source} placeholder="Withdrawal source" />
-            <TextAreaBlock>
-              <TextAreaLabel>Additional Info</TextAreaLabel>
-              <div className="ui form" style={{ flexGrow: 1, width: '100%' }}>
-                <StyledTextArea placeholder="Additional info" rows={6} {...inputs.info} />
-              </div>
-            </TextAreaBlock>
-          </InputsBlock>
-          <InfoBlock>
-            <StyledLabel>Amount now: {currentPaydeskAmount}</StyledLabel>
-            <StyledLabel>Amount after: {amountAfter}</StyledLabel>
-          </InfoBlock>
-        </ContentWrapper>
-
-        <ButtonsWrapper>
-          <StyledButton primary content="Ok" />
-          <StyledButton content="Cancel" onClick={onClose} />
-        </ButtonsWrapper>
-      </Container>
+      <Formik
+        initialValues={{ amount: '', source: '', additional_info: '' }}
+        validationSchema={WithdrawCashSchema}
+        onSubmit={(values) => {
+          onWithdrawCash(values);
+        }}
+        render={({ handleSubmit, handleChange, values, errors, submitCount }) => (
+          <StyledForm onSubmit={handleSubmit}>
+            <ContentWrapper>
+              <InputsBlock>
+                <StyledInput
+                  type="number"
+                  name="amount"
+                  label="Amount"
+                  onChange={handleChange}
+                  value={values.amount}
+                  placeholder="Amount to add"
+                  error={submitCount > 0 && errors.amount}
+                />
+                <StyledInput
+                  name="source"
+                  onChange={handleChange}
+                  value={values.source}
+                  label="Source"
+                  placeholder="Provide source"
+                  error={submitCount > 0 && errors.source}
+                />
+                <TextAreaBlock>
+                  <TextAreaLabel>Additional Info</TextAreaLabel>
+                  <div className="ui form" style={{ flexGrow: 1, width: '100%' }}>
+                    <StyledTextArea
+                      onChange={handleChange}
+                      value={values.additional_info}
+                      name="additional_info"
+                      placeholder="Additional info"
+                      rows={6}
+                    />
+                  </div>
+                </TextAreaBlock>
+              </InputsBlock>
+              <InfoBlock>
+                <StyledLabel>Amount now: {currentPaydeskAmount}</StyledLabel>
+                <StyledLabel>Amount after: {currentPaydeskAmount - values.amount}</StyledLabel>
+              </InfoBlock>
+            </ContentWrapper>
+            <ButtonsWrapper>
+              <StyledButton primary content="Ok" />
+              <StyledButton content="Cancel" onClick={onClose} />
+            </ButtonsWrapper>
+          </StyledForm>
+        )}
+      />
     </Modal>
   );
 };
@@ -41,10 +77,11 @@ const WithdrawCash = ({ isVisible, onClose, currentPaydeskAmount }) => {
 WithdrawCash.propTypes = {
   isVisible: bool.isRequired,
   onClose: func.isRequired,
+  onWithdrawCash: func.isRequired,
   currentPaydeskAmount: number.isRequired,
 };
 
-const Container = styled.div`
+const StyledForm = styled(Form)`
   display: flex;
   flex-direction: column;
 `;

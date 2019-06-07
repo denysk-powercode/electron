@@ -2,6 +2,7 @@ import { takeLatest, put } from 'redux-saga/effects';
 import qs from 'querystring';
 import ApiService from '../../services/api';
 import * as actions from './actions';
+import * as paydeskAactions from '../paydesk/actions';
 
 const toQuery = (arr) => {
   const obj = arr.reduce((init, item) => {
@@ -72,6 +73,7 @@ function* createTransactionSaga({ payload: { data, cb } }) {
     const response = yield ApiService.instance.post(apiRoutes.createTransaction, data);
     if (response.status === 201) {
       yield put(actions.createTransactionSuccess(response.data.transactions[0]));
+      yield put(paydeskAactions.checkPaydeskState());
       cb();
     } else {
       throw new Error('Error during transaction creation');

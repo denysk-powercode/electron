@@ -7,7 +7,9 @@ import Modal from '../../common/Modal';
 
 const OpenPaydesk = ({ isVisible, onClose, onOpenPaydesk }) => {
   const [input, onChange] = useState('');
+  const [submitCount, setSubmitCount] = useState(0);
   const submit = () => {
+    setSubmitCount(submitCount + 1);
     if (!input) return;
     onOpenPaydesk(input);
   };
@@ -17,7 +19,13 @@ const OpenPaydesk = ({ isVisible, onClose, onOpenPaydesk }) => {
         <Description>
           Please insert the amount of money you received from the accountant in order to start the work
         </Description>
-        <Input type="number" value={input} error={!input} placeholder="0" onChange={(e) => onChange(e.target.value)} />
+        <Input
+          type="number"
+          value={input}
+          error={submitCount > 0 && !input}
+          placeholder="0"
+          onChange={(e) => onChange(e.target.value)}
+        />
         <ButtonsWrapper>
           <StyledButton primary content="Ok" onClick={submit} />
           <StyledButton content="Cancel" onClick={onClose} />

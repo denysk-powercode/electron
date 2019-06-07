@@ -1,9 +1,9 @@
 import React from 'react';
-import { func, number } from 'prop-types';
+import { func, number, bool } from 'prop-types';
 import { Button } from 'semantic-ui-react';
 import styled from 'styled-components';
 
-const HeaderControls = ({ logout, openPaydesk, closePaydesk, addCash, withdrawCash, currentPaydeskAmount }) => {
+const HeaderControls = ({ logout, openPaydesk, closePaydesk, addCash, withdrawCash, currentPaydeskAmount, isOpen }) => {
   return (
     <Container>
       <Paydesk>Paydesk: {currentPaydeskAmount}</Paydesk>
@@ -16,10 +16,10 @@ const HeaderControls = ({ logout, openPaydesk, closePaydesk, addCash, withdrawCa
         </Button>
       </div>
       <div>
-        <LeftButton onClick={openPaydesk} inverted>
+        <LeftButton disabled={isOpen} onClick={openPaydesk} inverted>
           Open paydesk
         </LeftButton>
-        <Button inverted onClick={closePaydesk}>
+        <Button disabled={!isOpen} inverted onClick={closePaydesk}>
           Close paydesk
         </Button>
       </div>
@@ -37,6 +37,7 @@ HeaderControls.propTypes = {
   addCash: func.isRequired,
   withdrawCash: func.isRequired,
   currentPaydeskAmount: number.isRequired,
+  isOpen: bool.isRequired,
 };
 
 const Container = styled.div`

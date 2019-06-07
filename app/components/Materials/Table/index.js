@@ -4,7 +4,16 @@ import generateColumns from './columns';
 
 import Table from '../../common/Table';
 
-const MaterialsTable = ({ data, pages, isLoading, fetchData, pageSize, onPageSizeChange, isAdmin }) => {
+const MaterialsTable = ({
+  data,
+  pages,
+  isLoading,
+  fetchData,
+  pageSize,
+  onPageSizeChange,
+  isAdmin,
+  openEditMaterialModal,
+}) => {
   const columns = useMemo(() => generateColumns(isAdmin), [isAdmin]);
   return (
     <Table
@@ -15,7 +24,7 @@ const MaterialsTable = ({ data, pages, isLoading, fetchData, pageSize, onPageSiz
       onPageSizeChange={onPageSizeChange}
       pages={pages}
       pageSize={pageSize}
-      actions={{ isAdmin }}
+      actions={{ isAdmin, openEditMaterialModal }}
     />
   );
 };
@@ -27,6 +36,7 @@ MaterialsTable.propTypes = {
   pageSize: number.isRequired,
   fetchData: func.isRequired,
   onPageSizeChange: func.isRequired,
+  openEditMaterialModal: func.isRequired,
   isAdmin: bool.isRequired,
 };
 

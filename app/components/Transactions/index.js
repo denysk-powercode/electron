@@ -14,7 +14,7 @@ import ContentWrapper from '../common/ContentWrapper';
 import routes from '../../constants/routes';
 
 const { BrowserWindow } = electron.remote;
-const Transactions = ({ data, isLoading, fetchTransactions, push, user, totalCount }) => {
+const Transactions = ({ data, isLoading, fetchTransactions, push, user, totalCount, isOpen }) => {
   const [pageSize, setPageSize] = useState(10);
   const fetchData = (state) =>
     fetchTransactions(state.page * state.pageSize, state.pageSize, state.sorted[0], state.filtered);
@@ -32,7 +32,7 @@ const Transactions = ({ data, isLoading, fetchTransactions, push, user, totalCou
   return (
     <ContentWrapper
       title="Transactions"
-      actions={<Button primary content="New" onClick={navigateToNew} />}
+      actions={<Button primary disabled={!isOpen} content="New" onClick={navigateToNew} />}
       // actions={!user.role ? <TableActions openNewMaterialModal={openNewMaterialModal} importCSV={importCSV} /> : null}
     >
       <TransactionsTable
@@ -56,6 +56,7 @@ Transactions.propTypes = {
   push: func.isRequired,
   totalCount: number.isRequired,
   user: object.isRequired,
+  isOpen: bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -63,6 +64,7 @@ const mapStateToProps = (state) => ({
   isLoading: state.transactions.isLoading,
   totalCount: state.transactions.totalCount,
   user: state.app.user,
+  isOpen: state.paydesk.isOpen,
 });
 
 const mapDispatchToProps = {
