@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, Input, Icon, Popup } from 'semantic-ui-react';
 import styled from 'styled-components';
 import moment from 'moment';
+import DatePicker from 'react-datepicker';
 
 const validate = (num) => (Math.sign(Number(num)) === -1 || Number(num) < 0 ? 0 : num);
 const materialsColumns = [
@@ -14,17 +15,27 @@ const materialsColumns = [
     sortable: false,
     /* eslint-disable-next-line react/prop-types */
     Filter: ({ filter, onChange }) => {
+      const [from, setFrom] = useState('');
+      const [to, setTo] = useState('');
       return (
         <InputsWrapper>
-          <StyledInput
-            type="datetime-local"
-            placeholder="From"
-            onChange={(e) => onChange({ from: e.target.value, to: filter?.value?.to })}
+          <DatePicker
+            selected={from}
+            onChange={(date) => {
+              setFrom(date);
+              onChange({ from: date, to: filter?.value?.to });
+            }}
+            showTimeSelect
+            dateFormat="MMMM d, yyyy h:mm aa"
           />
-          <StyledInput
-            type="datetime-local"
-            placeholder="To"
-            onChange={(e) => onChange({ from: filter?.value?.from, to: e.target.value })}
+          <DatePicker
+            selected={to}
+            onChange={(date) => {
+              setTo(date);
+              onChange({ from: filter?.value?.from, to: date });
+            }}
+            showTimeSelect
+            dateFormat="MMMM d, yyyy h:mm aa"
           />
         </InputsWrapper>
       );
@@ -34,6 +45,7 @@ const materialsColumns = [
     accessor: ({ created_at }) => moment(created_at).format('DD.MM.YY HH:mm'),
     headerStyle: {
       minWidth: '400px',
+      overflow: 'visible',
     },
     style: {
       minWidth: '400px',

@@ -1,15 +1,19 @@
 import { takeLatest, put } from 'redux-saga/effects';
 import qs from 'querystring';
+import moment from 'moment';
 import ApiService from '../../services/api';
 import * as actions from './actions';
-import * as paydeskAactions from '../paydesk/actions';
+import * as paydeskActions from '../paydesk/actions';
 
 const toQuery = (arr) => {
   const obj = arr.reduce((init, item) => {
     switch (item.id) {
       case 'created_at': {
-        if (item.value.from) init.created_at__from = item.value.from;
-        if (item.value.to) init.created_at__to = item.value.to;
+        if (item.value.from) init.created_at__from = item.value.from.toISOString();
+        if (item.value.to)
+          init.created_at__to = moment(item.value.to)
+            .add(59, 's')
+            .toISOString();
         break;
       }
       case 'client':
@@ -73,7 +77,7 @@ function* createTransactionSaga({ payload: { data, cb } }) {
     const response = yield ApiService.instance.post(apiRoutes.createTransaction, data);
     if (response.status === 201) {
       yield put(actions.createTransactionSuccess(response.data.transactions[0]));
-      yield put(paydeskAactions.checkPaydeskState());
+      yield put(paydeskActions.checkPaydeskState());
       cb();
     } else {
       throw new Error('Error during transaction creation');
