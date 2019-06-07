@@ -94,27 +94,17 @@ const materialsColumns = [
     accessor: 'total_price',
     /* eslint-disable-next-line react/prop-types */
     Filter: ({ filter, onChange }) => {
-      const [from, setFrom] = useState('');
-      const [to, setTo] = useState('');
       return (
         <InputsWrapper>
           <StyledInput
             type="number"
-            value={from}
             placeholder="From"
-            onChange={(e) => {
-              setFrom(validate(e.target.value));
-              onChange({ from: validate(e.target.value), to: validate(filter?.value?.to) });
-            }}
+            onChange={(e) => onChange({ from: e.target.value, to: filter?.value?.to })}
           />
           <StyledInput
             type="number"
-            value={to}
             placeholder="To"
-            onChange={(e) => {
-              setTo(validate(e.target.value));
-              onChange({ from: validate(filter?.value?.from), to: validate(e.target.value) });
-            }}
+            onChange={(e) => onChange({ from: filter?.value?.from, to: e.target.value })}
           />
         </InputsWrapper>
       );
