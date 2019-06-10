@@ -4,7 +4,17 @@ import columns from './columns';
 
 import Table from '../../common/Table';
 
-const TransactionsTable = ({ data, pages, isLoading, fetchData, pageSize, onPageSizeChange, openPrint, isAdmin }) => {
+const TransactionsTable = ({
+  data,
+  pages,
+  isLoading,
+  fetchData,
+  pageSize,
+  onPageSizeChange,
+  openPrint,
+  isAdmin,
+  onCancelTransactionClick,
+}) => {
   return (
     <Table
       columns={columns}
@@ -14,7 +24,7 @@ const TransactionsTable = ({ data, pages, isLoading, fetchData, pageSize, onPage
       onPageSizeChange={onPageSizeChange}
       pages={pages}
       pageSize={pageSize}
-      actions={{ openPrint, isAdmin }}
+      actions={{ openPrint, onCancelTransactionClick, isAdmin }}
     />
   );
 };
@@ -26,6 +36,7 @@ TransactionsTable.propTypes = {
   pageSize: number.isRequired,
   fetchData: func.isRequired,
   onPageSizeChange: func.isRequired,
+  onCancelTransactionClick: func.isRequired,
   openPrint: func.isRequired,
   isAdmin: bool.isRequired,
 };

@@ -14,7 +14,7 @@ const customStyles = {
   },
 };
 
-const AsyncSelect = ({ field, form, loader, placeholder, labelName }) => (
+const AsyncSelect = ({ field, form, loader, placeholder, labelName, ...rest }) => (
   <StyledSelect
     error={getIn(form.errors, field.name) && form.submitCount > 0}
     getOptionLabel={(item) => item[labelName]}
@@ -34,6 +34,7 @@ const AsyncSelect = ({ field, form, loader, placeholder, labelName }) => (
     placeholder={placeholder}
     loadOptions={loader}
     styles={customStyles}
+    {...rest}
   />
 );
 

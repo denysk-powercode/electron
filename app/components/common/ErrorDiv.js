@@ -17,7 +17,7 @@ ErrorDiv.defaultProps = {
 const Container = styled.div`
   margin: 10px 0;
   color: red;
-  min-height: 15px;
+  min-height: 20px;
 `;
 
 export default ErrorDiv;

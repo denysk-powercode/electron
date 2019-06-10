@@ -10,7 +10,7 @@ import rootSaga from './rootSaga';
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['auth', 'app', 'router'],
+  whitelist: ['auth', 'app', 'router', 'transactions'],
 };
 
 export const configureStore = ({ initialState = {}, middleware = [] } = {}) => {

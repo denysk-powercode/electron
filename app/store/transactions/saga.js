@@ -51,7 +51,7 @@ const apiRoutes = {
   },
   createTransaction: '/transaction',
   updateTransaction: (id) => `/transaction/${id}`,
-  importCSV: '/transaction/import',
+  revertTransaction: (id) => `/transaction/revert/${id}`,
 };
 
 function* fetchTransactionsSaga({ payload: { offset, limit, sorted, filtered } }) {
@@ -81,6 +81,7 @@ function* createTransactionSaga({ payload: { data, cb } }) {
       throw new Error('Error during transaction creation');
     }
   } catch (e) {
+    console.log('err', e.response);
     cb(e.response.data.error || e.message || e);
     yield put(actions.createTransactionFailure());
   }
@@ -103,8 +104,24 @@ function* updateTransactionSaga({ payload: { data, cb } }) {
   }
 }
 
+function* revertTransactionSaga({ payload: { id, cb } }) {
+  try {
+    const response = yield ApiService.instance.post(apiRoutes.revertTransaction(id));
+    if (response.status === 201) {
+      yield put(actions.revertTransactionSuccess());
+      cb();
+    } else {
+      throw new Error('Error during transaction cancellation');
+    }
+  } catch (e) {
+    cb(e.response.data.error.message || e.message || e);
+    yield put(actions.revertTransactionFailure());
+  }
+}
+
 export default function* transactionSaga() {
   yield takeLatest(actions.fetchTransactions, fetchTransactionsSaga);
   yield takeLatest(actions.createTransaction, createTransactionSaga);
   yield takeLatest(actions.updateTransaction, updateTransactionSaga);
+  yield takeLatest(actions.revertTransaction, revertTransactionSaga);
 }

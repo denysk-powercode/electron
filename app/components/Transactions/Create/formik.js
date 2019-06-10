@@ -29,28 +29,39 @@ const formik = withFormik({
       first_name: Yup.string().required('Required'),
     }),
   }),
-  mapPropsToValues: () => ({
-    materials: [
-      {
-        id: Math.random(),
-        title: '',
-        weight: 0,
-        price: 0,
-        dynamicPrice: 0,
-      },
-    ],
-    client: '',
+  mapPropsToValues: ({ transaction }) => ({
+    materials: transaction
+      ? transaction.materials.map((item) => ({
+          ...item,
+          // price: item.transaction_price,
+          dynamicPrice: item.transaction_price * item.weight,
+        }))
+      : [
+          {
+            id: Math.random(),
+            title: '',
+            weight: 0,
+            price: 0,
+            dynamicPrice: 0,
+          },
+        ],
+    client: transaction?.client || '',
+    additional_info: transaction?.additional_info || '',
   }),
   handleSubmit: (form, { props, setSubmitting, setErrors }) => {
     setSubmitting(true);
-    props.createTransaction(transformInputData(form), (e) => {
-      if (e) {
-        setErrors({ networkError: e.message || e });
-      } else {
-        props.goBack();
-      }
-      setSubmitting(false);
-    });
+    if (props.transaction) {
+      props.openConfirmation();
+    } else {
+      props.createTransaction(transformInputData(form), (e) => {
+        if (e) {
+          setErrors({ networkError: e.message || e });
+        } else {
+          props.goBack();
+        }
+        setSubmitting(false);
+      });
+    }
   },
   displayName: 'NewTransaction',
 });

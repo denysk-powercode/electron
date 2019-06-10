@@ -7,13 +7,24 @@ import styled from 'styled-components';
 import formikHoc from './formik';
 import CustomInput from '../../common/Input';
 import AsyncSelect from '../../common/AsyncSelect';
+import ErrorDiv from '../../common/ErrorDiv';
 
-const CreateTransaction = ({ values, loadMaterials, loadClients, openClientModal, goBack, ...rest }) => {
+const CreateTransactionForm = ({
+  values,
+  loadMaterials,
+  loadClients,
+  openClientModal,
+  goBack,
+  transaction,
+  ...rest
+}) => {
   const totalPrice = values.materials.reduce((init, item) => init + item.dynamicPrice, 0);
   const openModal = (e) => {
     e.preventDefault();
     openClientModal();
   };
+
+  const isDisabled = Boolean(transaction);
 
   const renderFieldArray = (arrayHelpers) => (
     <LeftBlock>
@@ -26,13 +37,20 @@ const CreateTransaction = ({ values, loadMaterials, loadClients, openClientModal
               <Field
                 name={`materials.${index}`}
                 render={({ field, form }) => (
-                  <AsyncSelect field={field} form={form} loader={loadMaterials} placeholder="Material name" />
+                  <AsyncSelect
+                    isDisabled={isDisabled}
+                    field={field}
+                    form={form}
+                    loader={loadMaterials}
+                    placeholder="Material name"
+                  />
                 )}
               />
             </InputWrapper>
             <InputWrapper>
               <InputLabel>Weight {index + 1}</InputLabel>
               <StyledInput
+                disabled={isDisabled}
                 type="number"
                 name={`materials.${index}.weight`}
                 customOnChange={(value, field, form) => {
@@ -50,10 +68,16 @@ const CreateTransaction = ({ values, loadMaterials, loadClients, openClientModal
               <InputLabel>Price {index + 1}</InputLabel>
               <StyledInput disabled name={`materials.${index}.dynamicPrice`} />
             </InputWrapper>
-            <Button primary onClick={() => arrayHelpers.remove(index)} icon={<Icon name="minus" />} />
+            <Button
+              disabled={isDisabled}
+              primary
+              onClick={() => arrayHelpers.remove(index)}
+              icon={<Icon name="minus" />}
+            />
           </MaterialRow>
         ))}
       <StyledButton
+        disabled={isDisabled}
         primary
         onClick={(e) => {
           e.preventDefault();
@@ -76,6 +100,7 @@ const CreateTransaction = ({ values, loadMaterials, loadClients, openClientModal
               name="client"
               render={({ field, form }) => (
                 <AsyncSelect
+                  isDisabled={isDisabled}
                   field={field}
                   form={form}
                   loader={loadClients}
@@ -84,7 +109,13 @@ const CreateTransaction = ({ values, loadMaterials, loadClients, openClientModal
                 />
               )}
             />
-            <StyledButton leftmargin="true" primary icon={<Icon name="add" />} onClick={openModal} />
+            <StyledButton
+              disabled={isDisabled}
+              leftmargin="true"
+              primary
+              icon={<Icon name="add" />}
+              onClick={openModal}
+            />
           </InputWrapper>
           <TextAreaBlock>
             <TextAreaLabel>Additional Info</TextAreaLabel>
@@ -92,6 +123,7 @@ const CreateTransaction = ({ values, loadMaterials, loadClients, openClientModal
               render={({ form: { errors, submitCount }, field }) => (
                 <div className="ui form" style={{ flexGrow: 1, width: '100%' }}>
                   <StyledTextArea
+                    disabled={isDisabled}
                     error={errors[field.name] && submitCount > 0}
                     placeholder="Additional info"
                     rows={6}
@@ -104,7 +136,8 @@ const CreateTransaction = ({ values, loadMaterials, loadClients, openClientModal
           </TextAreaBlock>
         </RightBlock>
       </Wrapper>
-      <Price>Total price {totalPrice}</Price>
+      <Price>Total price {transaction ? -totalPrice : totalPrice}</Price>
+      <ErrorDiv>{rest.errors.networkError}</ErrorDiv>
       <ButtonsBlock>
         <Button primary type="submit" content="Submit" />
         <Button content="Cancel" onClick={goBack} />
@@ -113,12 +146,17 @@ const CreateTransaction = ({ values, loadMaterials, loadClients, openClientModal
   );
 };
 
-CreateTransaction.propTypes = {
+CreateTransactionForm.propTypes = {
   values: object.isRequired,
   loadMaterials: func.isRequired,
   loadClients: func.isRequired,
   openClientModal: func.isRequired,
   goBack: func.isRequired,
+  transaction: object,
+};
+
+CreateTransactionForm.defaultProps = {
+  transaction: null,
 };
 
 const StyledFrom = styled(Form)`
@@ -221,4 +259,4 @@ const ButtonsBlock = styled.div`
   justify-content: space-between;
 `;
 
-export default formikHoc(CreateTransaction);
+export default formikHoc(CreateTransactionForm);

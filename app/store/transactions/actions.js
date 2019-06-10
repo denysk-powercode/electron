@@ -22,3 +22,9 @@ export const createTransactionFailure = createAction('CREATE_TRANSACTION_FAILURE
 export const updateTransaction = createAction('UPDATE_TRANSACTION', (data, cb) => ({ data, cb }));
 export const updateTransactionSuccess = createAction('UPDATE_TRANSACTION_SUCCESS', (transaction) => ({ transaction }));
 export const updateTransactionFailure = createAction('UPDATE_TRANSACTION_FAILURE');
+
+export const revertTransaction = createAction('REVERT_TRANSACTION', (id, cb) => ({ id, cb }));
+export const revertTransactionSuccess = createAction('REVERT_TRANSACTION_SUCCESS');
+export const revertTransactionFailure = createAction('REVERT_TRANSACTION_FAILURE');
+
+export const setActiveTransaction = createAction('SET_ACTIVE_TRANSACTION', (transaction) => ({ transaction }));

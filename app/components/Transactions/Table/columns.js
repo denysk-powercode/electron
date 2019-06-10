@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useState } from 'react';
 import { Button, Input, Icon, Popup } from 'semantic-ui-react';
 import styled from 'styled-components';
@@ -142,13 +143,28 @@ const materialsColumns = [
     accessor: '',
     sortable: false,
     filterable: false,
-    Cell: (props) => (
-      <Button
-        /* eslint-disable-next-line react/prop-types */
-        onClick={() => props.tdProps.rest.actions.openPrint(props.original)}
-        content="Print"
-      />
+    Cell: ({ original, tdProps }) => (
+      <ControlsWrapper>
+        <RelatedBlock>
+          <StyledIcon
+            name={original.related_transaction_id ? 'linkify' : 'ban'}
+            disabled={Boolean(original.related_transaction_id)}
+            size="big"
+            onClick={() => tdProps.rest.actions.onCancelTransactionClick(original)}
+          />
+          <RelatedId>{original.related_transaction_id}</RelatedId>
+        </RelatedBlock>
+
+        <Button size="small" onClick={() => tdProps.rest.actions.openPrint(original)} content="Print" />
+      </ControlsWrapper>
     ),
+
+    headerStyle: {
+      minWidth: '150px',
+    },
+    style: {
+      minWidth: '150px',
+    },
   },
 ];
 
@@ -156,6 +172,36 @@ const InputsWrapper = styled.div`
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+`;
+
+const ControlsWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+`;
+
+const RelatedBlock = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
+const RelatedId = styled.span`
+  font-size: 10px;
+`;
+
+const StyledIcon = styled(Icon)`
+  color: ${(props) => !props.disabled && '#bb2929'};
+  transition: opacity 0.15s;
+  &:hover {
+    cursor: ${(props) => (props.disabled ? 'normal' : 'pointer')};
+    opacity: 0.5;
+  }
+  &&& {
+    margin-right: 0;
+  }
 `;
 
 const StyledInput = styled(Input)`

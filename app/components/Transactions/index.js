@@ -9,12 +9,21 @@ import reactDOMServer from 'react-dom/server';
 import TransactionsTable from './Table';
 import PrintTable from './PrintTable';
 import { selectTransactions } from '../../store/transactions/selectors';
-import { fetchTransactions } from '../../store/transactions/actions';
+import { fetchTransactions, setActiveTransaction } from '../../store/transactions/actions';
 import ContentWrapper from '../common/ContentWrapper';
 import routes from '../../constants/routes';
 
 const { BrowserWindow } = electron.remote;
-const Transactions = ({ data, isLoading, fetchTransactions, push, user, totalCount, isOpen }) => {
+const Transactions = ({
+  data,
+  isLoading,
+  fetchTransactions,
+  push,
+  user,
+  totalCount,
+  isPaydeskOpen,
+  setActiveTransaction,
+}) => {
   const [pageSize, setPageSize] = useState(10);
   const fetchData = (state) =>
     fetchTransactions(state.page * state.pageSize, state.pageSize, state.sorted[0], state.filtered);
@@ -29,10 +38,14 @@ const Transactions = ({ data, isLoading, fetchTransactions, push, user, totalCou
     });
     // contents.print();
   };
+  const onCancelTransactionClick = (transaction) => {
+    setActiveTransaction(transaction);
+    navigateToNew();
+  };
   return (
     <ContentWrapper
       title="Transactions"
-      actions={<Button primary disabled={!isOpen} content="New" onClick={navigateToNew} />}
+      actions={<Button primary disabled={!isPaydeskOpen} content="New" onClick={navigateToNew} />}
       // actions={!user.role ? <TableActions openNewMaterialModal={openNewMaterialModal} importCSV={importCSV} /> : null}
     >
       <TransactionsTable
@@ -44,6 +57,7 @@ const Transactions = ({ data, isLoading, fetchTransactions, push, user, totalCou
         pageSize={pageSize}
         isAdmin={!user?.role}
         openPrint={openPrint}
+        onCancelTransactionClick={onCancelTransactionClick}
       />
     </ContentWrapper>
   );
@@ -56,7 +70,8 @@ Transactions.propTypes = {
   push: func.isRequired,
   totalCount: number.isRequired,
   user: object.isRequired,
-  isOpen: bool.isRequired,
+  isPaydeskOpen: bool.isRequired,
+  setActiveTransaction: func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -64,11 +79,12 @@ const mapStateToProps = (state) => ({
   isLoading: state.transactions.isLoading,
   totalCount: state.transactions.totalCount,
   user: state.app.user,
-  isOpen: state.paydesk.isOpen,
+  isPaydeskOpen: state.paydesk.isOpen,
 });
 
 const mapDispatchToProps = {
   fetchTransactions,
+  setActiveTransaction,
   push,
 };
 

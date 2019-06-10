@@ -7,6 +7,7 @@ const initialState = {
   transactionsIds: [],
   totalCount: 0,
   isLoading: false,
+  activeTransaction: null,
 };
 
 const transactionReducer = handleActions(
@@ -33,6 +34,9 @@ const transactionReducer = handleActions(
     },
     [actions.fetchTransactionsFailure]: (draft) => {
       draft.isLoading = false;
+    },
+    [actions.setActiveTransaction]: (draft, { payload: { transaction } }) => {
+      draft.activeTransaction = transaction;
     },
   },
   initialState
