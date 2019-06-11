@@ -12,8 +12,8 @@ const TransactionsTable = ({
   pageSize,
   onPageSizeChange,
   openPrint,
-  isAdmin,
   onCancelTransactionClick,
+  isPaydeskOpen,
 }) => {
   return (
     <Table
@@ -24,7 +24,9 @@ const TransactionsTable = ({
       onPageSizeChange={onPageSizeChange}
       pages={pages}
       pageSize={pageSize}
-      actions={{ openPrint, onCancelTransactionClick, isAdmin }}
+      actions={{ openPrint, onCancelTransactionClick }}
+      states={{ isPaydeskOpen }}
+      defaultSorted={[{ id: 'id', desc: true }]}
     />
   );
 };
@@ -38,7 +40,7 @@ TransactionsTable.propTypes = {
   onPageSizeChange: func.isRequired,
   onCancelTransactionClick: func.isRequired,
   openPrint: func.isRequired,
-  isAdmin: bool.isRequired,
+  isPaydeskOpen: bool.isRequired,
 };
 
 export default TransactionsTable;

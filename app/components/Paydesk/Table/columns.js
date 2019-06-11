@@ -142,6 +142,7 @@ const materialsColumns = [
           placeholder="Select operation type"
           fluid
           selection
+          selectOnBlur={false}
         />
       );
     },

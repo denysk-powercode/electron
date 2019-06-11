@@ -2,7 +2,18 @@ import React from 'react';
 import { func, bool, array, number, object } from 'prop-types';
 import ReactTable from 'react-table';
 
-const Table = ({ data, pages, isLoading, fetchData, pageSize, onPageSizeChange, actions, columns, ...rest }) => {
+const Table = ({
+  data,
+  pages,
+  isLoading,
+  fetchData,
+  pageSize,
+  onPageSizeChange,
+  actions,
+  states,
+  columns,
+  ...rest
+}) => {
   return (
     <ReactTable
       columns={columns}
@@ -25,6 +36,7 @@ const Table = ({ data, pages, isLoading, fetchData, pageSize, onPageSizeChange, 
           justifyContent: 'center',
         },
         actions,
+        states,
       })}
       {...rest}
     />
@@ -39,11 +51,13 @@ Table.propTypes = {
   fetchData: func.isRequired,
   onPageSizeChange: func.isRequired,
   actions: object,
+  states: object,
   columns: array.isRequired,
 };
 
 Table.defaultProps = {
   actions: {},
+  states: {},
 };
 
 export default Table;

@@ -150,7 +150,7 @@ const materialsColumns = [
         <RelatedBlock>
           <StyledIcon
             name={original.related_transaction_id ? 'linkify' : 'ban'}
-            disabled={Boolean(original.related_transaction_id)}
+            disabled={!tdProps.rest.states.isPaydeskOpen || Boolean(original.related_transaction_id)}
             size="big"
             onClick={() => tdProps.rest.actions.onCancelTransactionClick(original)}
           />

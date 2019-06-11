@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { connect } from 'react-redux';
-import { func, bool, object, number, array } from 'prop-types';
+import { func, bool, number, array } from 'prop-types';
 import { push } from 'connected-react-router';
 import { Button } from 'semantic-ui-react';
 import electron from 'electron';
@@ -19,7 +19,6 @@ const Transactions = ({
   isLoading,
   fetchTransactions,
   push,
-  user,
   totalCount,
   isPaydeskOpen,
   setActiveTransaction,
@@ -55,9 +54,9 @@ const Transactions = ({
         fetchData={fetchData}
         onPageSizeChange={onPageSizeChange}
         pageSize={pageSize}
-        isAdmin={!user?.role}
         openPrint={openPrint}
         onCancelTransactionClick={onCancelTransactionClick}
+        isPaydeskOpen={isPaydeskOpen}
       />
     </ContentWrapper>
   );
@@ -69,7 +68,6 @@ Transactions.propTypes = {
   fetchTransactions: func.isRequired,
   push: func.isRequired,
   totalCount: number.isRequired,
-  user: object.isRequired,
   isPaydeskOpen: bool.isRequired,
   setActiveTransaction: func.isRequired,
 };

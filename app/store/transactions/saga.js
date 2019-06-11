@@ -81,7 +81,6 @@ function* createTransactionSaga({ payload: { data, cb } }) {
       throw new Error('Error during transaction creation');
     }
   } catch (e) {
-    console.log('err', e.response);
     cb(e.response.data.error || e.message || e);
     yield put(actions.createTransactionFailure());
   }

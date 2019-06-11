@@ -69,7 +69,6 @@ function* fetchPaydeskOperationsSaga({ payload: { offset, limit, sorted, filtere
       throw new Error('Error during fetching paydesk operations');
     }
   } catch (e) {
-    console.log('e', e || e.response || e.message);
     yield put(actions.fetchPaydeskOperationsFailure());
   }
 }
