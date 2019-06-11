@@ -111,18 +111,18 @@ export default class MenuBuilder {
         },
       ],
     };
-    // const subMenuViewProd = {
-    //   label: 'View',
-    //   submenu: [
-    //     {
-    //       label: 'Toggle Full Screen',
-    //       accelerator: 'Ctrl+Command+F',
-    //       click: () => {
-    //         this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
-    //       },
-    //     },
-    //   ],
-    // }; //TODO change on final build
+    const subMenuViewProd = {
+      label: 'View',
+      submenu: [
+        {
+          label: 'Toggle Full Screen',
+          accelerator: 'Ctrl+Command+F',
+          click: () => {
+            this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
+          },
+        },
+      ],
+    };
     const subMenuWindow = {
       label: 'Window',
       submenu: [
@@ -166,8 +166,7 @@ export default class MenuBuilder {
       ],
     };
 
-    // const subMenuView = process.env.NODE_ENV === 'development' ? subMenuViewDev : subMenuViewProd; //TODO change on final build
-    const subMenuView = subMenuViewDev;
+    const subMenuView = process.env.NODE_ENV === 'development' ? subMenuViewDev : subMenuViewProd;
 
     return [subMenuAbout, subMenuEdit, subMenuView, subMenuWindow, subMenuHelp];
   }
@@ -193,7 +192,7 @@ export default class MenuBuilder {
       {
         label: '&View',
         submenu:
-          process.env.NODE_ENV === 'development'
+          process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'production' // TODO change on final build
             ? [
                 {
                   label: '&Reload',

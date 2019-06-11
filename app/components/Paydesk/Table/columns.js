@@ -30,7 +30,7 @@ const options = [
   },
   {
     value: 5,
-    text: 'Canceled transaction',
+    text: 'Reverted transaction',
   },
 ];
 

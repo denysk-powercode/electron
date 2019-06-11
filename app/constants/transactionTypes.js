@@ -4,6 +4,6 @@ const transactionTypes = {
   2: 'Add cash',
   3: 'Withdraw cash',
   4: 'Transaction',
-  5: 'Canceled transaction',
+  5: 'Reverted transaction',
 };
 export default transactionTypes;
