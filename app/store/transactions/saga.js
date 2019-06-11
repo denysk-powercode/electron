@@ -109,6 +109,7 @@ function* revertTransactionSaga({ payload: { id, cb } }) {
     const response = yield ApiService.instance.post(apiRoutes.revertTransaction(id));
     if (response.status === 201) {
       yield put(actions.revertTransactionSuccess());
+      yield put(paydeskActions.checkPaydeskState());
       cb();
     } else {
       throw new Error('Error during transaction cancellation');
