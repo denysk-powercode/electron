@@ -1,11 +1,39 @@
-/* eslint-disable react/prop-types */
+/* eslint-disable react/prop-types,camelcase */
 import React, { useState } from 'react';
-import { Button, Input, Icon, Popup } from 'semantic-ui-react';
+import { Input, Icon, Popup, Dropdown } from 'semantic-ui-react';
 import styled from 'styled-components';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
 
-const validate = (num) => (Math.sign(Number(num)) === -1 || Number(num) < 0 ? 0 : num);
+import transactionTypes from '../../../constants/transactionTypes';
+
+const options = [
+  {
+    value: 0,
+    text: 'Open paydesk',
+  },
+  {
+    value: 1,
+    text: 'Close paydesk',
+  },
+  {
+    value: 2,
+    text: 'Add cash',
+  },
+  {
+    value: 3,
+    text: 'Withdraw cash',
+  },
+  {
+    value: 4,
+    text: 'Transaction',
+  },
+  {
+    value: 5,
+    text: 'Canceled transaction',
+  },
+];
+
 const materialsColumns = [
   {
     Header: 'Id',
@@ -55,57 +83,7 @@ const materialsColumns = [
     },
   },
   {
-    Header: 'Client',
-    id: 'client',
-    sortable: false,
-    accessor: ({ client }) => `${client.first_name} ${client.last_name}`,
-  },
-  {
-    Header: 'Materials',
-    id: 'material',
-    sortable: false,
-    accessor: ({ materials }) => {
-      const len = materials.length - 1;
-      return materials.reduce((acc, item, index) => `${acc}${item.title}${index !== len ? ', ' : ''}`, '');
-    },
-    style: {
-      whiteSpace: 'normal',
-      textAlign: 'center',
-    },
-  },
-  {
-    Header: 'Total weight',
-    accessor: 'total_weight',
-    /* eslint-disable-next-line react/prop-types */
-    Filter: ({ filter, onChange }) => {
-      const [from, setFrom] = useState('');
-      const [to, setTo] = useState('');
-      return (
-        <InputsWrapper>
-          <StyledInput
-            type="number"
-            value={from}
-            placeholder="From"
-            onChange={(e) => {
-              setFrom(validate(e.target.value));
-              onChange({ from: validate(e.target.value), to: validate(filter?.value?.to) });
-            }}
-          />
-          <StyledInput
-            type="number"
-            value={to}
-            placeholder="To"
-            onChange={(e) => {
-              setTo(validate(e.target.value));
-              onChange({ from: validate(filter?.value?.from), to: validate(e.target.value) });
-            }}
-          />
-        </InputsWrapper>
-      );
-    },
-  },
-  {
-    Header: 'Total price',
+    Header: 'Amount',
     accessor: 'total_price',
     /* eslint-disable-next-line react/prop-types */
     Filter: ({ filter, onChange }) => {
@@ -126,10 +104,66 @@ const materialsColumns = [
     },
   },
   {
+    Header: 'Paydesk amount after transaction',
+    accessor: 'amount_after_transaction',
+    Filter: ({ filter, onChange }) => {
+      return (
+        <InputsWrapper>
+          <StyledInput
+            type="number"
+            placeholder="From"
+            onChange={(e) => onChange({ from: e.target.value, to: filter?.value?.to })}
+          />
+          <StyledInput
+            type="number"
+            placeholder="To"
+            onChange={(e) => onChange({ from: filter?.value?.from, to: e.target.value })}
+          />
+        </InputsWrapper>
+      );
+    },
+    // headerStyle: {
+    //   minWidth: '150px',
+    //   whiteSpace: 'normal',
+    // },
+  },
+  {
+    Header: 'Type',
+    id: 'type',
+    sortable: false,
+    accessor: ({ transaction_type }) => transactionTypes[transaction_type],
+    Filter: ({ onChange }) => {
+      const handler = (e, data) => onChange(data.value);
+      return (
+        <StyledDropdown
+          clearable
+          options={options}
+          onChange={handler}
+          placeholder="Select operation type"
+          fluid
+          selection
+        />
+      );
+    },
+    headerStyle: {
+      overflow: 'visible',
+      minWidth: '200px',
+    },
+    style: {
+      minWidth: '200px',
+    },
+  },
+  {
     Header: 'Creator',
     id: 'user',
     sortable: false,
     accessor: ({ user }) => `${user.first_name} ${user.last_name}`,
+  },
+  {
+    Header: 'Source',
+    id: 'source',
+    sortable: false,
+    accessor: ({ source }) => source || '-',
   },
   {
     Header: 'Info',
@@ -140,34 +174,6 @@ const materialsColumns = [
       <Popup hoverable disabled={!row.value} trigger={<Icon name="info" size="large" />} content={row.value} />
     ),
   },
-  {
-    Header: 'Controls',
-    accessor: '',
-    sortable: false,
-    filterable: false,
-    Cell: ({ original, tdProps }) => (
-      <ControlsWrapper>
-        <RelatedBlock>
-          <StyledIcon
-            name={original.related_transaction_id ? 'linkify' : 'ban'}
-            disabled={Boolean(original.related_transaction_id)}
-            size="big"
-            onClick={() => tdProps.rest.actions.onCancelTransactionClick(original)}
-          />
-          <RelatedId>{original.related_transaction_id}</RelatedId>
-        </RelatedBlock>
-
-        <Button size="small" onClick={() => tdProps.rest.actions.openPrint(original)} content="Print" />
-      </ControlsWrapper>
-    ),
-
-    headerStyle: {
-      minWidth: '150px',
-    },
-    style: {
-      minWidth: '150px',
-    },
-  },
 ];
 
 const InputsWrapper = styled.div`
@@ -176,38 +182,22 @@ const InputsWrapper = styled.div`
   align-items: center;
 `;
 
-const ControlsWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  width: 100%;
-`;
-
-const RelatedBlock = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`;
-
-const RelatedId = styled.span`
-  font-size: 10px;
-`;
-
-const StyledIcon = styled(Icon)`
-  color: ${(props) => !props.disabled && '#bb2929'};
-  transition: opacity 0.15s;
-  &:hover {
-    cursor: ${(props) => (props.disabled ? 'normal' : 'pointer')};
-    opacity: 0.5;
-  }
-  &&& {
-    margin-right: 0;
-  }
-`;
-
 const StyledInput = styled(Input)`
   width: 45%;
+`;
+
+const StyledDropdown = styled(Dropdown)`
+  &&&&& {
+    padding-top: 6.5px;
+    padding-bottom: 6.5px;
+    min-height: 10px;
+    text-align: center;
+
+    i {
+      padding-top: 6.5px;
+      padding-bottom: 6.5px;
+    }
+  }
 `;
 
 export default materialsColumns;

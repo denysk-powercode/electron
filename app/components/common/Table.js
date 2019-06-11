@@ -2,7 +2,7 @@ import React from 'react';
 import { func, bool, array, number, object } from 'prop-types';
 import ReactTable from 'react-table';
 
-const Table = ({ data, pages, isLoading, fetchData, pageSize, onPageSizeChange, actions, columns }) => {
+const Table = ({ data, pages, isLoading, fetchData, pageSize, onPageSizeChange, actions, columns, ...rest }) => {
   return (
     <ReactTable
       columns={columns}
@@ -26,6 +26,7 @@ const Table = ({ data, pages, isLoading, fetchData, pageSize, onPageSizeChange, 
         },
         actions,
       })}
+      {...rest}
     />
   );
 };

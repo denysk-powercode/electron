@@ -22,3 +22,21 @@ export const addCashFailure = createAction('ADD_CASH_FAILURE');
 export const withdrawCash = createAction('WITHDRAW_CASH', (data, cb) => ({ data, cb }));
 export const withdrawCashSuccess = createAction('WITHDRAW_CASH_SUCCESS', (amount) => ({ amount }));
 export const withdrawCashFailure = createAction('WITHDRAW_CASH_FAILURE');
+
+export const fetchPaydeskOperations = createAction(
+  'FETCH_PAYDESK_OPERATIONS',
+  (offset = 0, limit = 10, sorted = {}, filtered = []) => ({
+    offset,
+    limit,
+    sorted,
+    filtered,
+  })
+);
+export const fetchPaydeskOperationsSuccess = createAction(
+  'FETCH_PAYDESK_OPERATIONS_SUCCESS',
+  (transactions, totalCount) => ({
+    transactions,
+    totalCount,
+  })
+);
+export const fetchPaydeskOperationsFailure = createAction('FETCH_PAYDESK_OPERATIONS_FAILURE');
