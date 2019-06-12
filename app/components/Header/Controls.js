@@ -1,9 +1,18 @@
 import React from 'react';
-import { func, number, bool } from 'prop-types';
+import { func, number, bool, string } from 'prop-types';
 import { Button } from 'semantic-ui-react';
 import styled from 'styled-components';
 
-const HeaderControls = ({ logout, openPaydesk, closePaydesk, addCash, withdrawCash, currentPaydeskAmount, isOpen }) => {
+const HeaderControls = ({
+  logout,
+  openPaydesk,
+  closePaydesk,
+  addCash,
+  withdrawCash,
+  currentPaydeskAmount,
+  isOpen,
+  userName,
+}) => {
   return (
     <Container>
       <Paydesk>Paydesk: {currentPaydeskAmount}</Paydesk>
@@ -23,9 +32,12 @@ const HeaderControls = ({ logout, openPaydesk, closePaydesk, addCash, withdrawCa
           Close paydesk
         </Button>
       </div>
-      <LogoutButton inverted onClick={logout}>
-        Logout
-      </LogoutButton>
+      <div>
+        <LoginInfo>Logged in as: {userName}</LoginInfo>
+        <LogoutButton inverted onClick={logout}>
+          Logout
+        </LogoutButton>
+      </div>
     </Container>
   );
 };
@@ -38,6 +50,7 @@ HeaderControls.propTypes = {
   withdrawCash: func.isRequired,
   currentPaydeskAmount: number.isRequired,
   isOpen: bool.isRequired,
+  userName: string.isRequired,
 };
 
 const Container = styled.div`
@@ -60,5 +73,12 @@ const LeftButton = styled(Button)`
 `;
 const LogoutButton = styled(Button)`
   align-self: flex-end;
+  margin-left: 20px;
+`;
+
+const LoginInfo = styled.span`
+  color: #fff;
+  font-size: 16px;
+  margin-right: 15px;
 `;
 export default HeaderControls;

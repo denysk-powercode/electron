@@ -104,8 +104,8 @@ const CreateTransactionForm = ({
                   field={field}
                   form={form}
                   loader={loadClients}
-                  labelName="first_name"
-                  placeholder="Client first name"
+                  labelName={(item) => `${item.first_name} ${item.last_name}`}
+                  placeholder="Client's name"
                 />
               )}
             />

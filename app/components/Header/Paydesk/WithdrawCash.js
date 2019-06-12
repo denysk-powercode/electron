@@ -34,7 +34,7 @@ const WithdrawCash = ({ isVisible, onClose, currentPaydeskAmount, onWithdrawCash
                   label="Amount"
                   onChange={handleChange}
                   value={values.amount}
-                  placeholder="Amount to add"
+                  placeholder="Amount to withdraw"
                   error={submitCount > 0 && errors.amount}
                 />
                 <StyledInput

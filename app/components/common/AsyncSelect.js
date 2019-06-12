@@ -1,5 +1,5 @@
 import React from 'react';
-import { func, object, string } from 'prop-types';
+import { func, object, string, oneOfType } from 'prop-types';
 import styled from 'styled-components';
 import { getIn } from 'formik';
 import Select from 'react-select/async';
@@ -17,7 +17,7 @@ const customStyles = {
 const AsyncSelect = ({ field, form, loader, placeholder, labelName, ...rest }) => (
   <StyledSelect
     error={getIn(form.errors, field.name) && form.submitCount > 0}
-    getOptionLabel={(item) => item[labelName]}
+    getOptionLabel={typeof labelName === 'function' ? labelName : (item) => item[labelName]}
     getOptionValue={(item) => item.id}
     onChange={(value) => {
       form.setFieldValue(field.name, value);
@@ -43,7 +43,7 @@ AsyncSelect.propTypes = {
   form: object.isRequired,
   loader: func.isRequired,
   placeholder: string,
-  labelName: string,
+  labelName: oneOfType([string, func]),
 };
 
 AsyncSelect.defaultProps = {

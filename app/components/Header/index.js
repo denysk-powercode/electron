@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { func, number, bool } from 'prop-types';
+import { func, number, bool, object } from 'prop-types';
 import { connect } from 'react-redux';
 import HeaderControls from './Controls';
 
@@ -11,7 +11,17 @@ import ClosePaydeskModal from './Paydesk/ClosePaydesk';
 import AddCashModal from './Paydesk/AddCash';
 import WithdrawCashModal from './Paydesk/WithdrawCash';
 
-const Header = ({ logout, openPaydesk, closePaydesk, amount, checkPaydeskState, isOpen, addCash, withdrawCash }) => {
+const Header = ({
+  logout,
+  openPaydesk,
+  closePaydesk,
+  amount,
+  checkPaydeskState,
+  isOpen,
+  addCash,
+  withdrawCash,
+  user,
+}) => {
   useEffect(() => {
     checkPaydeskState();
   }, []);
@@ -50,6 +60,7 @@ const Header = ({ logout, openPaydesk, closePaydesk, amount, checkPaydeskState, 
         closePaydesk={useCallback(() => dispatch({ name: 'closePaydesk', type: 'OPEN' }))}
         addCash={useCallback(() => dispatch({ name: 'addCash', type: 'OPEN' }))}
         withdrawCash={useCallback(() => dispatch({ name: 'withdrawCash', type: 'OPEN' }))}
+        userName={`${user.first_name} ${user.last_name}`}
       />
       <OpenPaydeskModal isVisible={modals.openPaydesk} onClose={closeOpenPaydeskModal} onOpenPaydesk={onOpenPaydesk} />
       <ClosePaydeskModal
@@ -83,6 +94,7 @@ Header.propTypes = {
   withdrawCash: func.isRequired,
   amount: number.isRequired,
   isOpen: bool.isRequired,
+  user: object.isRequired,
 };
 
 const mapDispatchToProps = {
@@ -97,6 +109,7 @@ const mapDispatchToProps = {
 const mapStateToProps = (state) => ({
   amount: state.paydesk.amount,
   isOpen: state.paydesk.isOpen,
+  user: state.app.user,
 });
 
 export default connect(
