@@ -10,6 +10,10 @@ const toQuery = (arr) => {
       if (item.value.to) init.price__to = Number(item.value.to);
       return init;
     }
+    if (item.id === 'id') {
+      init.material_id__contains_agg = item.value;
+      return init;
+    }
     if (item.value !== '') init[`${item.id}__contains`] = item.value;
     return init;
   }, {});

@@ -31,7 +31,7 @@ const toQuery = (arr) => {
         break;
       }
       case 'id': {
-        if (item.value) init.transaction_id__equals_agg = item.value;
+        if (item.value) init.transaction_id__contains_agg = item.value;
         break;
       }
       default: {

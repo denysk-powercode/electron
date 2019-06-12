@@ -10,6 +10,10 @@ const toQuery = (arr) => {
       if (item.value.to) init.client_total_price__to_agg = Number(item.value.to);
       return init;
     }
+    if (item.id === 'id') {
+      init.client_id__contains_agg = item.value;
+      return init;
+    }
     if (item.value !== '') init[`${item.id}__contains`] = item.value;
     return init;
   }, {});

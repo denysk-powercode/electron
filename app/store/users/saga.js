@@ -5,7 +5,11 @@ import * as actions from './actions';
 
 const toQuery = (arr) => {
   const obj = arr.reduce((init, item) => {
-    init[`${item.id}__contains`] = item.value;
+    if (item.id === 'id') {
+      init.user_id__contains_agg = item.value;
+      return init;
+    }
+    if (item.value !== '') init[`${item.id}__contains`] = item.value;
     return init;
   }, {});
   return qs.stringify(obj);
