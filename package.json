@@ -1,6 +1,6 @@
 {
   "name": "de-crm-electron",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "productName": "DE-CRM",
   "scripts": {
     "build": "concurrently \"yarn build-main\" \"yarn build-renderer\"",
@@ -80,16 +80,12 @@
     },
     "win": {
       "target": [
-        "nsis",
-        "msi"
+        "nsis"
       ]
     },
     "linux": {
       "target": [
-        "deb",
-        "rpm",
-        "snap",
-        "AppImage"
+        "deb"
       ],
       "category": "Development"
     },
@@ -99,8 +95,10 @@
     }
   },
   "author": {
-    "name": "Denys Kuts"
+    "name": "Denys Kuts",
+    "email": "admin@powercode.us"
   },
+  "homepage": "powercode.us",
   "keywords": [
     "electron",
     "react",
