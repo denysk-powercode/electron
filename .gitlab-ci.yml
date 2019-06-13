@@ -5,11 +5,11 @@ stages:
   - build
 
 build:
-  image: denisk/electron-builder-win
+  image: denisk/de-crm-electron
   stage: build
   artifacts:
     paths:
       - $CI_PROJECT_DIR/dist/*.*
   script:
     - sed "s/0.0.0/${VERSION_ID}/g" package.json > _package.json && mv _package.json package.json
-    - npm install && npm run build
+    - npm install && npm run package-win
