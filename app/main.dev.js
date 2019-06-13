@@ -12,16 +12,63 @@
  */
 import { app, BrowserWindow } from 'electron';
 import { autoUpdater } from 'electron-updater';
-import log from 'electron-log';
 import MenuBuilder from './menu';
+//
+// export default class AppUpdater {
+//   constructor() {
+//     log.transports.file.level = 'info';
+//     autoUpdater.logger = log;
+//     autoUpdater.checkForUpdatesAndNotify();
+//   }
+// }
 
-export default class AppUpdater {
-  constructor() {
-    log.transports.file.level = 'info';
-    autoUpdater.logger = log;
-    autoUpdater.checkForUpdatesAndNotify();
-  }
+// Auto upadater //
+function sendStatusToWindow(message) {
+  console.log(message);
 }
+
+autoUpdater.requestHeaders = { 'PRIVATE-TOKEN': '653B9Rb2aE-ZxS1j1RQ_' };
+autoUpdater.autoDownload = true;
+
+autoUpdater.setFeedURL({
+  provider: 'generic',
+  url: 'https://git.powercode.pro/denis.kuts/de-crm-electron/-/jobs/artifacts/master/raw/dist?job=build',
+});
+
+autoUpdater.on('checking-for-update', function() {
+  sendStatusToWindow('Checking for update...');
+});
+
+autoUpdater.on('update-available', function() {
+  sendStatusToWindow('Update available.');
+});
+
+autoUpdater.on('update-not-available', function() {
+  sendStatusToWindow('Update not available.');
+});
+
+autoUpdater.on('error', function() {
+  sendStatusToWindow('Error in auto-updater.');
+});
+
+autoUpdater.on('download-progress', function(progressObj) {
+  let logMessage = `Download speed: ${progressObj.bytesPerSecond}`;
+  logMessage = `${logMessage} - Downloaded ${parseInt(progressObj.percent, 10)}%`;
+  logMessage = `${logMessage} (${progressObj.transferred}/${progressObj.total})`;
+  sendStatusToWindow(logMessage);
+});
+
+autoUpdater.on('update-downloaded', function() {
+  sendStatusToWindow('Update downloaded; will install in 1 seconds');
+});
+
+autoUpdater.on('update-downloaded', function() {
+  setTimeout(function() {
+    autoUpdater.quitAndInstall();
+  }, 1000);
+});
+
+autoUpdater.checkForUpdates();
 
 let mainWindow = null;
 
