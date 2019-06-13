@@ -86,17 +86,13 @@
     },
     "win": {
       "target": [
-        "nsis",
-        "msi"
+        "nsis"
       ],
       "verifyUpdateCodeSignature": false
     },
     "linux": {
       "target": [
-        "deb",
-        "rpm",
-        "snap",
-        "AppImage"
+        "deb"
       ],
       "category": "Development"
     },
@@ -106,8 +102,10 @@
     }
   },
   "author": {
-    "name": "Denys Kuts"
+    "name": "Denys Kuts",
+    "email": "admin@powercode.us"
   },
+  "homepage": "powercode.us",
   "keywords": [
     "electron",
     "react",
@@ -250,7 +248,6 @@
     "semantic-ui-react": "^0.87.1",
     "source-map-support": "^0.5.11",
     "styled-components": "^4.2.0",
-    "update-electron-app": "^1.4.2",
     "yup": "^0.27.0"
   },
   "devEngines": {
