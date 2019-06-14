@@ -15,7 +15,7 @@ const HeaderControls = ({
 }) => {
   return (
     <Container>
-      <Paydesk>Paydesk: {currentPaydeskAmount}</Paydesk>
+      <Paydesk>Paydeskkk: {currentPaydeskAmount}</Paydesk>
       <div>
         <LeftButton onClick={addCash} inverted>
           Add cash
