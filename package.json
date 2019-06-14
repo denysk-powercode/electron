@@ -1,6 +1,6 @@
 {
   "name": "de-crm-electron",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "productName": "DE-CRM",
   "scripts": {
     "build": "concurrently \"yarn build-main\" \"yarn build-renderer\"",
@@ -66,8 +66,9 @@
     ],
     "publish": [
       {
-        "provider": "generic",
-        "url": "https://git.powercode.pro"
+        "provider": "github",
+        "owner": "denysk-powercode",
+        "repo": "electron"
       }
     ],
     "dmg": {
@@ -86,7 +87,8 @@
     },
     "win": {
       "target": [
-        "nsis"
+        "nsis",
+        "msi"
       ],
       "verifyUpdateCodeSignature": false
     },
